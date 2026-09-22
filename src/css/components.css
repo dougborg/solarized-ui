@@ -1,0 +1,290 @@
+.skip-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 20;
+  transform: translateY(-200%);
+  background: var(--paper);
+  padding: 10px 16px;
+  border: 2px solid var(--accent);
+}
+.skip-link:focus {
+  transform: none;
+}
+#main {
+  scroll-margin-top: 16px;
+}
+#main:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.theme-toggle {
+  position: fixed;
+  right: var(--control-inset);
+  bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 10;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  appearance: none;
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+  font-family: var(--mono);
+  line-height: 1;
+}
+.theme-toggle:hover {
+  color: var(--accent-ink);
+}
+.nerd-icon {
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1;
+}
+.theme-toggle .nerd-icon {
+  display: inline-block;
+  font-size: 22px;
+}
+.section-icon {
+  display: inline-block;
+  width: 1.5em;
+  font-size: 17px;
+  vertical-align: 0.02em;
+  color: var(--section-accent, var(--accent));
+}
+.action {
+  font-family: var(--mono);
+  background: var(--paper);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid var(--section-accent, var(--accent));
+  border-radius: var(--radius);
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+}
+/* The hover invert stays instant on purpose: transitioning it interpolates through
+   mid-contrast colours, and the reference page's axe check samples that state. */
+.action:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.text-list {
+  margin: 0;
+  padding-left: 18px;
+}
+.text-list > li {
+  margin: 0 0 12px;
+  padding-left: 4px;
+}
+.text-list > li::marker {
+  font-family: var(--mono);
+  color: var(--list-accent, var(--section-accent, var(--accent)));
+  font-weight: 600;
+}
+.text-list strong {
+  font-weight: 600;
+}
+.supporting-details {
+  margin-top: 8px;
+}
+.supporting-details > li {
+  margin-bottom: 6px;
+}
+ul.text-list > li::marker {
+  content: "› ";
+}
+ul.supporting-details > li::marker {
+  content: "· ";
+}
+.text-list > li:last-child {
+  margin-bottom: 0;
+}
+.content-section {
+  --section-accent: var(--accent);
+  --card-background: var(--rail);
+}
+.section-title {
+  font-family: var(--mono);
+  text-transform: lowercase;
+  font-size: var(--text-section);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  margin: 0 0 var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--section-accent, var(--accent));
+}
+.content-section a:where(:not(.action)) {
+  color: var(--ink);
+}
+.content-section a:where(:not(.action)):hover {
+  color: var(--accent-ink);
+}
+.surface {
+  --ink: var(--card-ink);
+  --ink-2: var(--card-ink);
+  --ink-3: var(--card-ink);
+  padding: var(--card-padding, var(--space-4));
+  color: var(--ink);
+  background: var(--card-background, var(--rail));
+  border: 0;
+  border-radius: var(--radius);
+  font-size: var(--text-body);
+  line-height: var(--leading);
+}
+
+.surface > :last-child {
+  margin-bottom: 0;
+}
+:where(.surface) code {
+  color: var(--ink);
+  background: var(--paper);
+}
+.stack {
+  display: grid;
+  gap: var(--space-6);
+}
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-4);
+}
+.status {
+  font-size: var(--text-small);
+  font-weight: 600;
+  color: var(--ink);
+}
+[data-accent="blue"] {
+  --section-accent: var(--tone-blue);
+}
+[data-accent="violet"] {
+  --section-accent: var(--tone-violet);
+}
+[data-accent="orange"] {
+  --section-accent: var(--tone-orange);
+}
+[data-accent="green"] {
+  --section-accent: var(--tone-green);
+}
+[data-accent="magenta"] {
+  --section-accent: var(--tone-magenta);
+}
+[data-accent="cyan"] {
+  --section-accent: var(--tone-cyan);
+}
+[data-accent="yellow"] {
+  --section-accent: var(--tone-yellow);
+}
+[data-accent="red"] {
+  --section-accent: var(--tone-red);
+}
+@media print {
+  ul.text-list > li::marker {
+    content: normal;
+    color: #000;
+  }
+  ul.supporting-details > li::marker {
+    content: "· ";
+  }
+  :root {
+    color-scheme: light;
+    --paper: #fff;
+    --rail: #fff;
+    --ink: #000;
+    --ink-2: #333;
+    --ink-3: #444;
+    --accent: #000;
+    --accent-ink: #000;
+    --rail-ink: #000;
+    --card-ink: #000;
+  }
+  body {
+    background: #fff;
+    color: #000;
+  }
+  .content-section,
+  [data-accent] {
+    --section-accent: #000;
+  }
+  .surface {
+    background: none;
+    color: #000;
+  }
+  .section-title {
+    font-family: var(--sans);
+    text-transform: none;
+    color: #000;
+    border-color: #bbb;
+  }
+  .theme-toggle,
+  .skip-link {
+    display: none;
+  }
+  a {
+    color: #000;
+  }
+}
+@media (forced-colors: active) {
+  .surface {
+    outline: 1px solid CanvasText;
+  }
+  .section-title {
+    border-color: CanvasText;
+  }
+  .status {
+    color: CanvasText;
+  }
+}
+
+.entry-heading {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-4);
+}
+.entry-title {
+  color: var(--ink);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.3;
+}
+.meta {
+  color: var(--ink-3);
+  font-size: 0.84375rem;
+  line-height: 1.4;
+  margin: 0;
+}
+.facts {
+  margin: 0;
+  font-size: var(--text-small);
+}
+.facts dt {
+  font-weight: 500;
+  margin-top: var(--space-2);
+}
+.facts dd {
+  margin: 0;
+  color: var(--ink-2);
+}
+
+.status::before {
+  content: "";
+  display: inline-block;
+  width: 0.65em;
+  height: 0.65em;
+  margin-right: var(--space-2);
+  background: var(--section-accent, var(--accent));
+}

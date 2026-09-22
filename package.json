@@ -1,0 +1,84 @@
+{
+  "name": "@dougborg/solarized-ui",
+  "version": "0.1.0",
+  "description": "A small, framework-free Solarized design system: tokens, typography, components, local fonts, and a light/dark theme control.",
+  "license": "MIT",
+  "author": "Douglas Borg",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dougborg/solarized-ui.git"
+  },
+  "homepage": "https://dougborg.github.io/solarized-ui/",
+  "bugs": "https://github.com/dougborg/solarized-ui/issues",
+  "keywords": [
+    "solarized",
+    "design-system",
+    "css",
+    "design-tokens",
+    "dark-mode"
+  ],
+  "files": [
+    "dist",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "style": "./dist/solarized-ui.css",
+  "exports": {
+    ".": "./dist/solarized-ui.css",
+    "./solarized-ui.css": "./dist/solarized-ui.css",
+    "./theme.js": "./dist/theme.js",
+    "./theme-control.html": "./dist/theme-control.html",
+    "./fonts/*": "./dist/fonts/*",
+    "./package.json": "./package.json"
+  },
+  "sideEffects": [
+    "*.css",
+    "./dist/theme.js"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=26.8.2"
+  },
+  "packageManager": "pnpm@12.4.1",
+  "scripts": {
+    "build": "node scripts/build.ts",
+    "prepack": "node scripts/build.ts",
+    "check": "pnpm lint && pnpm typecheck && pnpm check:unused && pnpm test",
+    "lint": "biome check . && rumdl check .",
+    "format": "biome check --write . && rumdl fmt .",
+    "typecheck": "tsc --noEmit",
+    "check:unused": "knip --no-progress",
+    "test": "node --test test/*.test.ts",
+    "test:browser": "playwright test",
+    "preview": "node scripts/preview.ts"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@biomejs/biome": "2.5.14",
+    "@fontsource/ibm-plex-sans": "5.3.0",
+    "@fontsource/jetbrains-mono": "5.3.0",
+    "@playwright/test": "1.63.0",
+    "@types/node": "26.6.2",
+    "knip": "6.37.0",
+    "rumdl": "0.2.75",
+    "typescript": "7.0.2"
+  },
+  "knip": {
+    "entry": [
+      "scripts/*.ts",
+      "src/theme.ts",
+      "test/**/*.ts"
+    ],
+    "project": [
+      "scripts/**/*.ts",
+      "src/**/*.ts",
+      "test/**/*.ts"
+    ],
+    "ignoreDependencies": [
+      "@fontsource/ibm-plex-sans",
+      "@fontsource/jetbrains-mono"
+    ]
+  }
+}

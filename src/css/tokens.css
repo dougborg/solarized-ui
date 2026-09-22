@@ -1,0 +1,79 @@
+/* Exact sRGB values: https://ethanschoonover.com/solarized/#the-values */
+:root {
+  --solarized-base03: #002b36;
+  --solarized-base02: #073642;
+  --solarized-base01: #586e75;
+  --solarized-base00: #657b83;
+  --solarized-base0: #839496;
+  --solarized-base1: #93a1a1;
+  --solarized-base2: #eee8d5;
+  --solarized-base3: #fdf6e3;
+  --solarized-yellow: #b58900;
+  --solarized-orange: #cb4b16;
+  --solarized-red: #dc322f;
+  --solarized-magenta: #d33682;
+  --solarized-violet: #6c71c4;
+  --solarized-blue: #268bd2;
+  --solarized-cyan: #2aa198;
+  --solarized-green: #859900;
+  color-scheme: light;
+  --ink: var(--solarized-base01);
+  --ink-2: var(--solarized-base01);
+  --ink-3: var(--solarized-base01);
+  --rule: var(--solarized-base1);
+  --rail: var(--solarized-base2);
+  --paper: var(--solarized-base3);
+  --accent: var(--solarized-blue);
+  --accent-ink: var(--solarized-base02);
+  --rail-ink: var(--solarized-base02);
+  --card-ink: var(--solarized-base02);
+  --tone-blue: var(--solarized-blue);
+  --tone-violet: var(--solarized-violet);
+  --tone-orange: var(--solarized-orange);
+  --tone-green: var(--solarized-green);
+  --tone-magenta: var(--solarized-magenta);
+  --tone-cyan: var(--solarized-cyan);
+  --tone-yellow: var(--solarized-yellow);
+  --tone-red: var(--solarized-red);
+  --sans: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono:
+    "JetBrains Mono Nerd Font", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-11: 44px;
+  --space-12: 48px;
+  --radius: 4px;
+  --text-small: 0.875rem;
+  --text-body: 1rem;
+  --text-lead: 1.09375rem;
+  --text-section: 1.375rem;
+  --text-title: 1.75rem;
+  --leading: 1.55;
+  --measure: 68ch;
+  --control-inset: max(16px, env(safe-area-inset-right));
+  --control-gutter: calc(var(--control-inset) + 48px);
+}
+@supports (color: light-dark(white, black)) {
+  :root {
+    color-scheme: light dark;
+    --ink: light-dark(var(--solarized-base01), var(--solarized-base1));
+    --ink-2: light-dark(var(--solarized-base01), var(--solarized-base1));
+    --ink-3: light-dark(var(--solarized-base01), var(--solarized-base1));
+    --rule: light-dark(var(--solarized-base1), var(--solarized-base01));
+    --rail: light-dark(var(--solarized-base2), var(--solarized-base02));
+    --paper: light-dark(var(--solarized-base3), var(--solarized-base03));
+    --accent-ink: light-dark(var(--solarized-base02), var(--solarized-base1));
+    --rail-ink: light-dark(var(--solarized-base02), var(--solarized-base1));
+    --card-ink: light-dark(var(--solarized-base02), var(--solarized-base1));
+  }
+  :root:where([data-theme="light"]) {
+    color-scheme: light;
+  }
+  :root:where([data-theme="dark"]) {
+    color-scheme: dark;
+  }
+}

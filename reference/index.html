@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>solarized-ui</title>
+<meta name="description" content="A shared Solarized foundation for personal sites and internal tools.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/solarized-ui.css">
+<style>
+  .specimen { max-width: 1120px; margin-inline: auto; padding: var(--space-12) var(--control-gutter) 104px var(--space-8); }
+  .specimen > section, .specimen > footer { margin-top: var(--space-12); }
+  .eyebrow { font-family: var(--mono); font-size: var(--text-small); color: var(--ink); margin-bottom: var(--space-3); }
+  .specimen h1 { max-width: 24ch; font-size: clamp(1.75rem, 4vw, 2.75rem); margin-bottom: var(--space-4); }
+  .specimen nav { margin-top: var(--space-6); }
+  .specimen nav a { min-height: 44px; display: inline-flex; align-items: center; }
+  .swatches { grid-template-columns: repeat(4, minmax(0, 1fr)); list-style: none; padding: 0; }
+  .swatch { border-top: 8px solid var(--section-accent); }
+  .swatch strong { color: var(--ink); }
+  .swatch p { font-size: var(--text-small); margin-top: var(--space-2); }
+  .examples { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .specimen h3 { margin: 0 0 var(--space-3); }
+  .specimen pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: var(--text-small); }
+  .specimen pre code { padding: 0; background: none; }
+  .specimen footer { font-size: var(--text-small); }
+  @media (max-width: 700px) {
+    .specimen { padding-top: var(--space-8); padding-left: var(--space-4); }
+    .swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
+    .examples { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media print { .specimen { padding: 0; } .specimen nav { display: none; } }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<main class="specimen" id="main" tabindex="-1">
+  <header>
+    <p class="eyebrow">@dougborg/solarized-ui / interface foundations</p>
+    <h1>Calm surfaces.<br>Clear hierarchy.</h1>
+    <p class="lead">A Solarized foundation for personal sites and internal tools. Readable prose, a little terminal character, and color that helps you find your place.</p>
+    <nav class="cluster" aria-label="Design system sections">
+      <a href="#palette">Palette</a><a href="#type">Typography</a><a href="#content">Content</a><a href="#services">Services</a><a href="#reuse">Reuse</a>
+    </nav>
+  </header>
+
+  <section id="palette" class="content-section">
+    <h2 class="section-title"><span class="nerd-icon section-icon" aria-hidden="true">&#xf0d0;</span>Color &amp; surfaces</h2>
+    <p class="lead">Paper for the page, a quiet raised surface for groups, and the eight unmodified Solarized accents. Text uses Solarized neutrals for contrast; swatches, glyphs, rules, and markers use the exact accents. Try the theme glyph in the lower corner.</p>
+    <ul class="stack swatches" role="list">
+      <li class="content-section surface swatch" data-accent="blue"><strong>Blue</strong><p><code>#268bd2</code></p><p>Navigation &amp; links</p><a href="#reuse">Example link</a></li>
+      <li class="content-section surface swatch" data-accent="cyan"><strong>Cyan</strong><p><code>#2aa198</code></p><p>Systems &amp; connections</p><a href="#reuse">Example link</a></li>
+      <li class="content-section surface swatch" data-accent="green"><strong>Green</strong><p><code>#859900</code></p><p>Capabilities &amp; success</p><a href="#reuse">Example link</a></li>
+      <li class="content-section surface swatch" data-accent="yellow"><strong>Yellow</strong><p><code>#b58900</code></p><p>Attention &amp; maintenance</p><a href="#reuse">Example link</a></li>
+      <li class="content-section surface swatch" data-accent="orange"><strong>Orange</strong><p><code>#cb4b16</code></p><p>Work &amp; activity</p><a href="#reuse">Example link</a></li>
+      <li class="content-section surface swatch" data-accent="red"><strong>Red</strong><p><code>#dc322f</code></p><p>Failures &amp; errors</p><a href="#reuse">Example link</a></li>
+      <li class="content-section surface swatch" data-accent="magenta"><strong>Magenta</strong><p><code>#d33682</code></p><p>Learning &amp; credentials</p><a href="#reuse">Example link</a></li>
+      <li class="content-section surface swatch" data-accent="violet"><strong>Violet</strong><p><code>#6c71c4</code></p><p>Projects &amp; tools</p><a href="#reuse">Example link</a></li>
+    </ul>
+  </section>
+
+  <section id="type" class="content-section" data-accent="magenta">
+    <h2 class="section-title"><span class="nerd-icon section-icon" aria-hidden="true">&#xf19d;</span>Typography &amp; rhythm</h2>
+    <div class="stack examples">
+      <article class="surface">
+        <h3 class="entry-title">Readable by default</h3>
+        <p>IBM Plex Sans carries prose and data. JetBrains Mono Nerd Font adds character to section headings, controls, and code such as <code>pnpm check</code>.</p>
+        <p>Keep proper nouns capitalized. Use lowercase section labels, a 68-character reading measure, and one supporting-detail level.</p>
+      </article>
+      <article class="surface">
+        <h3 class="entry-title">A small shared scale</h3>
+        <dl class="facts">
+          <dt>Body / leading</dt><dd>16px / 1.55</dd>
+          <dt>Small / section / title</dt><dd>14px / 22px / 28px</dd>
+          <dt>Spacing</dt><dd>4, 8, 12, 16, 24, 32, 44, 48px</dd>
+          <dt>Corners / touch targets</dt><dd>4px / at least 44px</dd>
+        </dl>
+      </article>
+    </div>
+  </section>
+
+  <section id="content" class="content-section" data-accent="orange">
+    <h2 class="section-title"><span class="nerd-icon section-icon" aria-hidden="true">&#xf0b1;</span>Content hierarchy</h2>
+    <article class="surface">
+      <div class="entry-heading"><h3 class="entry-title">Example organization</h3><p class="meta">2024–Present</p></div>
+      <p>Lead with the organization or project, then context, then accomplishments.</p>
+      <ul class="text-list">
+        <li><strong>State the outcome first.</strong> Keep the headline useful on its own.
+          <ul class="text-list supporting-details"><li>Supporting implementation details sit one level below.</li><li>Use <a href="#reuse">descriptive evidence links</a> where they help.</li></ul>
+        </li>
+        <li><strong>Group related facts.</strong> Use a definition list for label/value pairs and ordered lists when sequence matters.</li>
+      </ul>
+    </article>
+  </section>
+
+  <section id="services" class="content-section" data-accent="cyan">
+    <h2 class="section-title"><span class="nerd-icon section-icon" aria-hidden="true">&#xf0c2;</span>Internal service examples</h2>
+    <p>Illustrative states, not live service data. Status always includes a text label; hue stays consistent across themes.</p>
+    <div class="stack examples">
+      <article class="surface">
+        <div class="entry-heading"><h3 class="entry-title">Build runner</h3><p class="status" data-accent="green">Ready</p></div>
+        <p>Available for the next job.</p>
+        <dl class="facts"><dt>Queue</dt><dd>0 pending jobs</dd><dt>Runtime</dt><dd><code>linux / arm64</code></dd></dl>
+      </article>
+      <article class="surface">
+        <div class="entry-heading"><h3 class="entry-title">Backup service</h3><p class="status" data-accent="yellow">Maintenance</p></div>
+        <p>Scheduled work is in progress.</p>
+        <p class="status" data-accent="red">Failure example: last backup did not finish.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="reuse" class="content-section" data-accent="violet">
+    <h2 class="section-title"><span class="nerd-icon section-icon" aria-hidden="true">&#xf121;</span>Use the foundation</h2>
+    <div class="surface">
+      <p>Install the package, then serve its stylesheet, local fonts with their licenses, and the optional theme script. No framework or runtime is required.</p>
+      <pre><code>pnpm add @dougborg/solarized-ui</code></pre>
+      <pre><code>&lt;link rel="stylesheet" href="assets/solarized-ui.css"&gt;
+&lt;section class="content-section" data-accent="violet"&gt;
+  &lt;h2 class="section-title"&gt;Projects&lt;/h2&gt;
+  &lt;article class="surface"&gt;Your content&lt;/article&gt;
+&lt;/section&gt;</code></pre>
+      <ol class="text-list">
+        <li>Copy <code>dist/</code> into your site with its font licenses.</li>
+        <li>Add your layout and semantic content.</li>
+        <li>Check themes, keyboard access, and narrow screens.</li>
+      </ol>
+      <p style="margin-top: var(--space-4)"><a class="action" href="https://github.com/dougborg/solarized-ui">View the source</a></p>
+    </div>
+  </section>
+  <footer><p>This page uses the published stylesheet and theme control. MIT licensed; <a href="https://ethanschoonover.com/solarized/">Solarized</a> by Ethan Schoonover (MIT), and the bundled fonts retain their own licenses.</p></footer>
+</main>
+{{theme_control}}
+</body>
+</html>

@@ -1,0 +1,143 @@
+/* Long-form writing, such as Markdown rendered by a static site generator, within the reading measure. */
+.prose {
+  max-width: var(--measure);
+}
+.prose > :first-child {
+  margin-top: 0;
+}
+.prose h2,
+.prose h3,
+.prose h4 {
+  color: var(--ink);
+  font-weight: 600;
+}
+.prose h2 {
+  margin: var(--space-8) 0 var(--space-3);
+  font-size: var(--text-section);
+}
+.prose h3 {
+  margin: var(--space-6) 0 var(--space-2);
+  font-size: 1.1875rem;
+}
+.prose h4 {
+  margin: var(--space-6) 0 var(--space-2);
+  font-size: var(--text-body);
+}
+.prose ul,
+.prose ol {
+  margin: 0 0 var(--space-4);
+  padding-left: 1.5em;
+}
+.prose li {
+  margin-bottom: var(--space-1);
+}
+.prose li > ul,
+.prose li > ol {
+  margin: var(--space-1) 0 0;
+}
+.prose blockquote {
+  margin: 0 0 var(--space-4);
+  padding-left: var(--space-4);
+  border-left: 3px solid var(--section-accent, var(--accent));
+  color: var(--ink-2);
+}
+.prose blockquote > :last-child,
+.prose li > :last-child {
+  margin-bottom: 0;
+}
+/* Code wraps rather than scrolling, so no block needs its own keyboard-focusable scroll region. */
+.prose pre {
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  color: var(--rail-ink);
+  background: var(--rail);
+  font-family: var(--mono);
+  font-size: var(--text-small);
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.prose pre code {
+  padding: 0;
+  color: inherit;
+  background: none;
+  font-size: inherit;
+}
+.prose table {
+  width: 100%;
+  margin: 0 0 var(--space-4);
+  border-collapse: collapse;
+  font-size: var(--text-small);
+}
+.prose caption {
+  margin-bottom: var(--space-2);
+  text-align: left;
+}
+.prose th,
+.prose td {
+  padding: var(--space-2) var(--space-3) var(--space-2) 0;
+  border-bottom: 1px solid var(--rule);
+  text-align: left;
+  vertical-align: top;
+}
+.prose th {
+  font-weight: 600;
+}
+.prose img {
+  max-width: 100%;
+  height: auto;
+}
+.prose figure {
+  margin: 0 0 var(--space-4);
+}
+.prose figcaption {
+  margin-top: var(--space-2);
+  font-size: var(--text-small);
+  color: var(--ink-3);
+}
+.prose hr {
+  margin: var(--space-8) 0;
+  border: 0;
+  border-top: 1px solid var(--rule);
+}
+.prose .footnotes {
+  margin-top: var(--space-8);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--rule);
+  font-size: var(--text-small);
+}
+/* Prism token classes (Astro's `prism` highlighter, among others). No Solarized accent reaches 4.5:1
+   on the light code surface, so highlighting uses weight and style and never changes the text colour. */
+.token:is(.comment, .prolog, .doctype, .cdata) {
+  font-style: italic;
+}
+.token:is(.keyword, .atrule, .important, .tag, .selector, .builtin) {
+  font-weight: 600;
+}
+.token.deleted {
+  text-decoration: line-through;
+}
+.token.inserted {
+  text-decoration: underline;
+}
+@media print {
+  .prose pre {
+    border: 1px solid #bbb;
+  }
+  .prose blockquote,
+  .prose th,
+  .prose td,
+  .prose hr,
+  .prose .footnotes {
+    border-color: #bbb;
+  }
+}
+@media (forced-colors: active) {
+  .prose pre {
+    outline: 1px solid CanvasText;
+  }
+  .prose blockquote {
+    border-left-color: CanvasText;
+  }
+}

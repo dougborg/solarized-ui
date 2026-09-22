@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Example article | solarized-ui</title>
+<meta name="description" content="A single-column article page built from the solarized-ui site and prose components.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/solarized-ui.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<div class="page-column">
+  <header class="masthead">
+    <p class="masthead-title"><a href="index.html">solarized-ui</a></p>
+    <nav class="site-nav" aria-label="Site">
+      <ul>
+        <li><a href="index.html">Components</a></li>
+        <li><a href="article.html" aria-current="page">Article</a></li>
+        <li><a href="https://github.com/dougborg/solarized-ui">Source</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <article>
+      <header class="article-header">
+        <h1>A calm place to write</h1>
+        <p class="meta"><time datetime="2026-09-22">Sep 22, 2026</time> · Example article</p>
+      </header>
+      <div class="prose">
+        <p class="lead">This page shows the site scaffolding and long-form prose components together: a reading column, a masthead with navigation, an article, a list of posts, and a footer.</p>
+        <p>Paragraphs stay within the 68-character measure, and links such as <a href="#tables">the table example</a> keep their underline. Inline code like <code>pnpm add @dougborg/solarized-ui</code> sits on the raised surface.</p>
+
+        <h2 id="structure">Structure</h2>
+        <p>Headings inside prose use the sans family, so section labels in monospace remain distinct.</p>
+        <h3 id="lists">Lists</h3>
+        <ul>
+          <li>Unordered lists keep native markers.
+            <ul><li>One nested level is enough for most writing.</li></ul>
+          </li>
+          <li>Ordered lists keep their numbering.</li>
+        </ul>
+        <ol>
+          <li>Write in plain Markdown.</li>
+          <li>Build with any static site generator.</li>
+        </ol>
+
+        <blockquote>
+          <p>Color should help you find your place, never carry meaning on its own.</p>
+        </blockquote>
+
+        <h2 id="code">Code</h2>
+        <p>Blocks wrap instead of scrolling. Highlighting uses weight and style, because no Solarized accent is readable enough as small text on the light code surface.<sup id="fnref:1"><a href="#fn:1" class="footnote" role="doc-noteref">1</a></sup></p>
+        <pre class="language-ts"><code class="language-ts"><span class="token comment">// Load the stylesheet once; fonts resolve beside it.</span>
+<span class="token keyword">import</span> <span class="token string">"@dougborg/solarized-ui"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">const</span> accents <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"blue"</span><span class="token punctuation">,</span> <span class="token string">"cyan"</span><span class="token punctuation">,</span> <span class="token string">"green"</span><span class="token punctuation">]</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">;</span></code></pre>
+
+        <h2 id="tables">Tables and figures</h2>
+        <table>
+          <caption class="meta">Type scale</caption>
+          <thead><tr><th scope="col">Role</th><th scope="col">Size</th><th scope="col">Family</th></tr></thead>
+          <tbody>
+            <tr><td>Body</td><td>16px</td><td>IBM Plex Sans</td></tr>
+            <tr><td>Section</td><td>22px</td><td>JetBrains Mono</td></tr>
+            <tr><td>Small</td><td>14px</td><td>IBM Plex Sans</td></tr>
+          </tbody>
+        </table>
+        <figure>
+          <img src="favicon.svg" width="96" height="96" alt="Four Solarized accent squares on a dark tile">
+          <figcaption>Figures take a short caption below the image.</figcaption>
+        </figure>
+        <hr>
+        <p>That is the whole vocabulary for long-form pages.</p>
+
+        <div class="footnotes" role="doc-endnotes">
+          <ol>
+            <li id="fn:1"><p>Several accents reach 4.5:1 on the dark code surface, but none do on the light one. <a href="#fnref:1" class="reversefootnote" role="doc-backlink">Back to text</a></p></li>
+          </ol>
+        </div>
+      </div>
+    </article>
+
+    <section class="content-section" data-accent="blue" aria-labelledby="more">
+      <h2 class="section-title" id="more">More posts</h2>
+      <ul class="post-list">
+        <li>
+          <article>
+            <div class="entry-heading"><h3 class="entry-title"><a href="article.html">A calm place to write</a></h3><p class="meta"><time datetime="2026-09-22">Sep 22, 2026</time></p></div>
+            <p>How the prose and site components fit together on one page.</p>
+          </article>
+        </li>
+        <li>
+          <article>
+            <div class="entry-heading"><h3 class="entry-title"><a href="index.html#palette">Choosing colors that stay put</a></h3><p class="meta"><time datetime="2026-09-11">Sep 11, 2026</time></p></div>
+            <p>Why every accent keeps its exact Solarized value in both themes.</p>
+          </article>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <p>An example page for <a href="https://github.com/dougborg/solarized-ui">solarized-ui</a>. MIT licensed.</p>
+  </footer>
+</div>
+{{theme_control}}
+</body>
+</html>

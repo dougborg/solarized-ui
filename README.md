@@ -80,6 +80,13 @@ Reserve `var(--control-gutter)` at the right and at least 60px at the bottom so 
 | `.stack`, `.cluster` | Vertical and wrapping horizontal composition |
 | `.action`, `.status` | Outlined link/action and explicit textual status |
 | `.nerd-icon`, `.section-icon` | Decorative glyphs alongside visible text |
+| `.page-column` | Single reading column with the control gutter reserved; top-level blocks in its `main` are spaced apart |
+| `.masthead`, `.masthead-title`, `.site-nav` | Site title and primary navigation; mark the current page with `aria-current="page"` |
+| `.article-header` | An article's `h1` and `.meta` line above its body |
+| `.post-list` | A list of posts built from `.entry-heading`, `.entry-title`, `.meta`, and an optional summary |
+| `.page-footer` | Small, ruled site footer |
+| `.prose` | Long-form writing: headings, lists, quotes, wrapped code blocks, tables, figures, rules, and footnotes |
+| `.token.*` | Prism syntax tokens, highlighted by weight and style only, never by color |
 
 The scale is 4, 8, 12, 16, 24, 32, 44, 48px; token suffixes count 4px units.
 Body text is 1rem with 1.55 leading; small/section/title sizes are 0.875/1.1875/1.75rem.
@@ -101,6 +108,8 @@ The Nerd Font is a subset, so verify new glyphs before using them.
 Keep focus visible and controls at least 44px.
 This is not a complete form, navigation, or application-widget library.
 
+See the [example article](https://dougborg.org/solarized-ui/article.html) for the site and prose components together.
+For code highlighting, use a highlighter that emits Prism token classes, such as Astro's `syntaxHighlight: "prism"`; highlighters that write inline colors bypass the contrast rules above.
 Class names are global and unprefixed, so check them against any other stylesheet an application loads.
 
 ## Versioning

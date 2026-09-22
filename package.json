@@ -42,6 +42,9 @@
     "node": ">=26.8.2"
   },
   "packageManager": "pnpm@12.4.1",
+  "volta": {
+    "node": "26.8.2"
+  },
   "scripts": {
     "build": "node scripts/build.ts",
     "prepack": "node scripts/build.ts",

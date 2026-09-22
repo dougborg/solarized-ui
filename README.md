@@ -3,7 +3,7 @@
 A small, framework-free design system built on the exact [Solarized](https://ethanschoonover.com/solarized/) palette: semantic tokens, mixed IBM Plex Sans and JetBrains Mono Nerd Font typography, a few content components, and an optional light/dark theme control.
 It serves personal sites and internal tools, and started as the foundation of [resume.dougborg.org](https://resume.dougborg.org/).
 
-See the [reference page](https://dougborg.github.io/solarized-ui/) for every component in both themes.
+See the [reference page](https://dougborg.org/solarized-ui/) for every component in both themes.
 
 ## Install
 

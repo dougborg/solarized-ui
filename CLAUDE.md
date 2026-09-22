@@ -26,7 +26,7 @@ Run `actionlint` after editing workflows.
 - Biome cognitive complexity stays at most 15 per function.
 - Write one sentence per line in Markdown.
 - Conventional Commits with lowercase subjects; release-please derives versions and the changelog from them.
-- Never publish to npm by hand after the first release; `.github/workflows/release.yml` is the trusted publisher.
+- Never publish to npm by hand after the first release; `.github/workflows/release.yml` is the stage-only trusted publisher, and the owner approves each staged version with 2FA.
 
 ## Consumers
 

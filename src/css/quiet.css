@@ -43,7 +43,6 @@
   padding: var(--space-4) var(--space-6);
   color: var(--ink);
   background: var(--panel);
-  /* Marked rows round their outer corners to the inner radius, radius-lg minus this 1px. */
   border: 1px solid var(--panel-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--elevation);
@@ -279,21 +278,33 @@
   box-shadow: inset 0 0 0 2px var(--status-color, var(--row-color));
 }
 
-/* The outer rows round their leading corners to the panel's inner radius, so an edge curves at
-   the panel's corners as a callout's does. A table's first body row is on top unless a visible
-   caption or head sits above it, and a foot always renders last, wherever it is in the source. */
-.panel-rows > li:first-child,
+/* The outer rows round their leading corners to the panel's inner radius (its radius minus its
+   1px border), so an edge curves at the panel's corners as a callout's does. */
+.panel-rows > li:first-child {
+  border-start-start-radius: calc(var(--radius-lg) - 1px);
+}
+.panel-rows > li:last-child {
+  border-end-start-radius: calc(var(--radius-lg) - 1px);
+}
+/* In a table, the first body group with rows is on top unless a visible caption or head sits
+   above it; a caption counts as on top even with caption-side: bottom. A foot with rows always
+   renders last, wherever it is in the source. */
+.panel-rows > table > tfoot > tr:last-child > :first-child {
+  border-end-start-radius: calc(var(--radius-lg) - 1px);
+}
 .panel-rows
-  table:not(:has(> :is(caption, thead):not(.visually-hidden)))
-  > tbody:first-of-type
+  > table:not(:has(> tfoot > tr))
+  > tbody:has(> tr):not(:has(~ tbody > tr))
+  > tr:last-child
+  > :first-child {
+  border-end-start-radius: calc(var(--radius-lg) - 1px);
+}
+.panel-rows
+  > table:not(:has(> :is(caption, thead):not(.visually-hidden)))
+  > tbody:has(> tr):not(tbody:has(> tr) ~ *)
   > tr:first-child
   > :first-child {
   border-start-start-radius: calc(var(--radius-lg) - 1px);
-}
-.panel-rows > li:last-child,
-.panel-rows table:not(:has(> tfoot)) > tbody:last-of-type > tr:last-child > :first-child,
-.panel-rows table > tfoot > tr:last-child > :first-child {
-  border-end-start-radius: calc(var(--radius-lg) - 1px);
 }
 
 /* Tables that become labelled rows on narrow screens. Stacking changes how some browsers expose
@@ -340,12 +351,15 @@
   }
   /* Stacked, the head is out of the flow and the groups render in source order. */
   .panel-rows
-    .table--stack:not(:has(> caption:not(.visually-hidden)))
-    > :is(tbody, tfoot):not(:is(tbody, tfoot) ~ *)
+    > .table--stack:not(:has(> caption:not(.visually-hidden)))
+    > :is(tbody, tfoot):has(> tr):not(:is(tbody, tfoot):has(> tr) ~ *)
     > tr:first-child {
     border-start-start-radius: calc(var(--radius-lg) - 1px);
   }
-  .panel-rows .table--stack > :is(tbody, tfoot):last-child > tr:last-child {
+  .panel-rows
+    > .table--stack
+    > :is(tbody, tfoot):has(> tr):not(:has(~ :is(tbody, tfoot) > tr))
+    > tr:last-child {
     border-end-start-radius: calc(var(--radius-lg) - 1px);
   }
   .panel-rows .table--stack tr:is([data-state], [data-accent]) {
@@ -399,7 +413,8 @@
     background: none;
     box-shadow: none;
   }
-  /* Borders print where shadows may not, so the edge becomes one. */
+  /* Borders print where shadows may not, so the edge becomes one. It takes 4px of the content
+     box, which only matters on paper. */
   .callout--tinted {
     border-inline-start: 4px solid var(--callout-color);
   }
@@ -413,11 +428,8 @@
   .panel-rows .table--stack tr:is([data-state], [data-accent]) {
     border-inline-start: 4px solid var(--row-color);
   }
-  .panel-rows .table--stack tr:is([data-state], [data-accent]) > :first-child {
-    border-inline-start: 0;
-  }
 }
-@media (forced-colors: active) and (max-width: 560px) {
+@media print and (max-width: 560px), (forced-colors: active) and (max-width: 560px) {
   .panel-rows .table--stack tr:is([data-state], [data-accent]) > :first-child {
     border-inline-start: 0;
   }

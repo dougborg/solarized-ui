@@ -1,0 +1,263 @@
+/* Shared site patterns: an identity band, timelines, cards, chips, and reading aids. Each takes
+   its color from the nearest data-accent and stays legible without that color. */
+
+/* Identity */
+.accent-band {
+  display: block;
+  height: 4px;
+  margin: 0;
+  border: 0;
+  background: var(--accent-band);
+}
+.masthead-title--identity {
+  font-family: var(--sans);
+  font-size: var(--text-title);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+/* Bold 28px is large text, so the exact blue meets its 3:1 contrast on both papers. */
+.masthead-title--identity a {
+  color: var(--solarized-blue);
+}
+.masthead--band {
+  position: relative;
+  padding-bottom: var(--space-3);
+  border-bottom: 0;
+}
+.masthead--band::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 4px;
+  background: var(--accent-band);
+}
+
+/* Metadata and navigation between pages */
+.meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-4);
+}
+.pager {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: var(--space-4);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--rule);
+}
+.pager a {
+  display: grid;
+  gap: var(--space-1);
+  min-height: 44px;
+  align-content: center;
+  color: var(--ink);
+  font-weight: 600;
+}
+.pager a[rel="next"] {
+  text-align: end;
+}
+
+/* Timeline: a rail with one marker per item, each in its item's accent. */
+.timeline-list {
+  --timeline-axis: 5px;
+  --timeline-top: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.timeline-list > li {
+  position: relative;
+  padding: 0 0 var(--space-6) calc(var(--timeline-axis) * 2 + var(--space-6));
+}
+.timeline-list > li:last-child {
+  padding-bottom: 0;
+}
+/* The rail below each marker belongs to its item, so accents change where items do. */
+.timeline-list > li::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--timeline-axis) - 1px);
+  top: var(--timeline-top);
+  bottom: 0;
+  width: 2px;
+  background: var(--section-accent, var(--accent));
+}
+.timeline-list > li::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: var(--timeline-top);
+  width: calc(var(--timeline-axis) * 2);
+  height: calc(var(--timeline-axis) * 2);
+  border-radius: 50%;
+  background: var(--section-accent, var(--accent));
+}
+/* Larger markers for logos or initials: set the axis to half the marker's size. */
+.timeline-list--marked {
+  --timeline-axis: 20px;
+  --timeline-top: 0px;
+}
+.timeline-list--marked > li::before {
+  top: calc(var(--timeline-axis) * 2);
+}
+.timeline-list--marked > li::after {
+  display: none;
+}
+.timeline-marker {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: grid;
+  place-items: center;
+  width: calc(var(--timeline-axis) * 2);
+  height: calc(var(--timeline-axis) * 2);
+  border: 2px solid var(--section-accent, var(--accent));
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--accent-ink);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+}
+.timeline-marker svg,
+.timeline-marker img {
+  display: block;
+  width: 60%;
+  height: 60%;
+}
+
+/* Cards: tinted surfaces with an accent edge, in a grid that reflows to one column. */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--card-min, 11rem)), 1fr));
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.card {
+  --ink: var(--card-ink);
+  --ink-2: var(--card-ink);
+  --ink-3: var(--card-ink);
+  position: relative;
+  padding: var(--space-4) var(--space-4) var(--space-4) var(--space-6);
+  border-radius: var(--radius);
+  color: var(--ink);
+  background: var(--section-tint, var(--rail));
+}
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  border-radius: var(--radius) 0 0 var(--radius);
+  background: var(--section-accent, var(--accent));
+}
+.card > :first-child {
+  margin-top: 0;
+}
+.card > :last-child {
+  margin-bottom: 0;
+}
+.card a {
+  color: var(--ink);
+}
+.card a:hover {
+  color: var(--accent-ink);
+}
+
+/* Chips: static tags, such as skills or post topics. */
+.chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 1px 8px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  color: var(--ink-2);
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.chip .nerd-icon {
+  font-size: 12px;
+  color: var(--section-accent, var(--accent));
+}
+
+/* A reading bar that fills as the page scrolls. It needs no script, rests empty when the page
+   cannot scroll, and is omitted without scroll timelines or when motion is reduced. */
+.read-progress {
+  display: none;
+}
+@supports (animation-timeline: scroll()) {
+  .read-progress {
+    display: block;
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 5;
+    height: 3px;
+    background: var(--accent-band);
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: read-progress linear both;
+    animation-timeline: scroll(root);
+  }
+  @keyframes read-progress {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .read-progress {
+    display: none;
+  }
+}
+
+@media print {
+  .accent-band,
+  .masthead--band::after,
+  .timeline-list > li::before,
+  .timeline-list > li::after,
+  .card::before,
+  .read-progress,
+  .pager {
+    display: none;
+  }
+  .card {
+    background: none;
+    border: 1px solid #93a1a1;
+  }
+  .timeline-marker {
+    border-color: #93a1a1;
+  }
+}
+@media (forced-colors: active) {
+  .accent-band,
+  .masthead--band::after,
+  .timeline-list > li::before,
+  .timeline-list > li::after,
+  .card::before,
+  .read-progress {
+    background: CanvasText;
+  }
+  .timeline-marker,
+  .chip {
+    border-color: CanvasText;
+  }
+  .card {
+    outline: 1px solid CanvasText;
+  }
+}

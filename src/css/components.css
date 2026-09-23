@@ -146,6 +146,10 @@ ul.supporting-details > li::marker {
 .surface > :last-child {
   margin-bottom: 0;
 }
+/* A surface that takes its accent's tint, for grouping by color without relying on it. */
+.surface[data-tint] {
+  --card-background: var(--section-tint, var(--rail));
+}
 :where(.surface) code {
   color: var(--ink);
   background: var(--paper);
@@ -167,27 +171,35 @@ ul.supporting-details > li::marker {
 }
 [data-accent="blue"] {
   --section-accent: var(--tone-blue);
+  --section-tint: var(--tint-blue);
 }
 [data-accent="violet"] {
   --section-accent: var(--tone-violet);
+  --section-tint: var(--tint-violet);
 }
 [data-accent="orange"] {
   --section-accent: var(--tone-orange);
+  --section-tint: var(--tint-orange);
 }
 [data-accent="green"] {
   --section-accent: var(--tone-green);
+  --section-tint: var(--tint-green);
 }
 [data-accent="magenta"] {
   --section-accent: var(--tone-magenta);
+  --section-tint: var(--tint-magenta);
 }
 [data-accent="cyan"] {
   --section-accent: var(--tone-cyan);
+  --section-tint: var(--tint-cyan);
 }
 [data-accent="yellow"] {
   --section-accent: var(--tone-yellow);
+  --section-tint: var(--tint-yellow);
 }
 [data-accent="red"] {
   --section-accent: var(--tone-red);
+  --section-tint: var(--tint-red);
 }
 @media print {
   ul.text-list > li::marker {

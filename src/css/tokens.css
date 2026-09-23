@@ -56,6 +56,26 @@
   --measure: 68ch;
   --control-inset: max(16px, env(safe-area-inset-right));
   --control-gutter: calc(var(--control-inset) + 48px);
+  /* Six accents as hard stops, in the résumé's order; a decorative identity rule. */
+  --accent-band: linear-gradient(
+    to right,
+    var(--solarized-blue) 0 16.6667%,
+    var(--solarized-cyan) 0 33.3333%,
+    var(--solarized-green) 0 50%,
+    var(--solarized-yellow) 0 66.6667%,
+    var(--solarized-orange) 0 83.3333%,
+    var(--solarized-magenta) 0
+  );
+  /* Accent tints: quiet surfaces derived from each exact accent's hue. Without relative color
+     support they fall back to the neutral raised surface. */
+  --tint-blue: var(--rail);
+  --tint-cyan: var(--rail);
+  --tint-green: var(--rail);
+  --tint-yellow: var(--rail);
+  --tint-orange: var(--rail);
+  --tint-red: var(--rail);
+  --tint-magenta: var(--rail);
+  --tint-violet: var(--rail);
 }
 @supports (color: light-dark(white, black)) {
   :root {
@@ -75,5 +95,42 @@
   }
   :root:where([data-theme="dark"]) {
     color-scheme: dark;
+  }
+}
+/* Derived only from the exact accents' hues: lightness and chroma change, never the hue. */
+@supports (color: oklch(from red l c h)) and (color: light-dark(white, black)) {
+  :root {
+    --tint-blue: light-dark(
+      oklch(from var(--solarized-blue) 94% 0.025 h),
+      oklch(from var(--solarized-blue) 28% 0.025 h)
+    );
+    --tint-cyan: light-dark(
+      oklch(from var(--solarized-cyan) 94% 0.025 h),
+      oklch(from var(--solarized-cyan) 28% 0.025 h)
+    );
+    --tint-green: light-dark(
+      oklch(from var(--solarized-green) 94% 0.025 h),
+      oklch(from var(--solarized-green) 28% 0.025 h)
+    );
+    --tint-yellow: light-dark(
+      oklch(from var(--solarized-yellow) 94% 0.025 h),
+      oklch(from var(--solarized-yellow) 28% 0.025 h)
+    );
+    --tint-orange: light-dark(
+      oklch(from var(--solarized-orange) 94% 0.025 h),
+      oklch(from var(--solarized-orange) 28% 0.025 h)
+    );
+    --tint-red: light-dark(
+      oklch(from var(--solarized-red) 94% 0.025 h),
+      oklch(from var(--solarized-red) 28% 0.025 h)
+    );
+    --tint-magenta: light-dark(
+      oklch(from var(--solarized-magenta) 94% 0.025 h),
+      oklch(from var(--solarized-magenta) 28% 0.025 h)
+    );
+    --tint-violet: light-dark(
+      oklch(from var(--solarized-violet) 94% 0.025 h),
+      oklch(from var(--solarized-violet) 28% 0.025 h)
+    );
   }
 }

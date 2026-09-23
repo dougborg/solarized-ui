@@ -278,7 +278,8 @@
   box-shadow: inset -4px 0 0 var(--row-color);
 }
 /* Between two tinted rows, the divider is a gap of plain panel, also where a body meets the next
-   group. An empty body between two groups hides that meeting, so it keeps the plain divider. */
+   group. An empty body between two groups hides that meeting, as does an empty last body when the
+   foot comes first in the source, so those keep the plain divider. */
 .panel-rows > li:is([data-state], [data-accent]) + li:is([data-state], [data-accent]),
 .panel-rows tr:is([data-state], [data-accent]) + tr:is([data-state], [data-accent]) > *,
 .panel-rows

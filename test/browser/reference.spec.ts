@@ -465,6 +465,7 @@ const tableShapes: Record<string, string> = {
   "an empty first body": `${hiddenHead}<tbody></tbody>${rows("a", "b")}<tbody></tbody>`,
   "a foot before the body": `${hiddenHead}<tfoot>${row("f")}</tfoot>${rows("a", "b")}`,
   "a foot after the body": `${hiddenHead}${rows("a", "b")}<tfoot>${row("f")}</tfoot>`,
+  "accent rows": `${hiddenHead}<tbody><tr data-accent="cyan"><th>a</th><td>x</td></tr></tbody>${rows("b")}`,
   "a single row": hiddenHead + rows("a"),
   "a nested table": `<tbody><tr data-state="down"><th>a</th><td><table>${rows("n", "m")}</table></td></tr></tbody>`,
 };
@@ -499,7 +500,7 @@ function misplacedDividers(panel: HTMLElement): string[] {
   const plain = getComputedStyle(panel).backgroundColor;
   return ordered.flatMap((tr, index) => {
     const style = getComputedStyle((stacked ? tr : tr.firstElementChild) as Element);
-    const gap = tr.hasAttribute("data-state") && ordered[index - 1]?.hasAttribute("data-state");
+    const gap = [tr, ordered[index - 1]].every((r) => r?.matches("[data-state], [data-accent]"));
     const right =
       (style.borderTopWidth !== "0px") === index > 0 &&
       (index === 0 || (style.borderTopColor === plain) === gap);

@@ -1,0 +1,285 @@
+/* Quiet patterns for dashboards and status pages: bordered panels with rows, status states,
+   callouts, and small section labels. They carry no decoration beyond a faint edge. */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.masthead--plain {
+  border-bottom: 0;
+}
+
+/* A small, muted heading for a group of panels. */
+.section-label {
+  margin: 0 0 var(--space-3);
+  font-family: var(--sans);
+  font-size: var(--text-small);
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-3);
+}
+
+/* Numbers that line up in columns and never break. */
+.numeric {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Panels */
+.panel {
+  --ink: var(--panel-ink);
+  --ink-2: var(--panel-ink);
+  --ink-3: var(--panel-ink);
+  padding: var(--space-4) var(--space-6);
+  color: var(--ink);
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elevation);
+}
+.panel > :last-child {
+  margin-bottom: 0;
+}
+.panel + .panel {
+  margin-top: var(--space-4);
+}
+.panel-title {
+  display: block;
+  margin: 0;
+  font-size: var(--text-body);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--ink);
+}
+.panel-description {
+  display: block;
+  margin: 0;
+  font-size: var(--text-small);
+  line-height: 1.45;
+  color: var(--ink-3);
+}
+
+/* Rows inside a panel: a list, or a wrapper around a table. Put .panel-rows on the panel. */
+.panel-rows {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  list-style: none;
+}
+.panel-rows > li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-6);
+  padding: var(--space-4) var(--space-6);
+}
+.panel-rows > li > :first-child {
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+.panel-rows > li + li {
+  border-top: 1px solid var(--panel-divider);
+}
+.panel-rows table {
+  width: 100%;
+  margin: 0;
+  border-collapse: collapse;
+}
+.panel-rows th,
+.panel-rows td {
+  padding: var(--space-4) var(--space-6);
+  border: 0;
+  text-align: start;
+  vertical-align: middle;
+  font-weight: inherit;
+}
+.panel-rows tr + tr > * {
+  border-top: 1px solid var(--panel-divider);
+}
+.panel-rows td:last-child {
+  text-align: end;
+}
+
+/* Status states: the text names the state; the dot only repeats it in color. */
+.status[data-state="ok"] {
+  --status-color: var(--solarized-green);
+  --status-tint: var(--tint-green);
+}
+.status[data-state="warn"] {
+  --status-color: var(--solarized-yellow);
+  --status-tint: var(--tint-yellow);
+}
+.status[data-state="down"] {
+  --status-color: var(--solarized-red);
+  --status-tint: var(--tint-red);
+}
+.status[data-state="info"] {
+  --status-color: var(--solarized-blue);
+  --status-tint: var(--tint-blue);
+}
+.status[data-state]::before {
+  width: 0.55em;
+  height: 0.55em;
+  border-radius: 50%;
+  vertical-align: 0.08em;
+  background: var(--status-color);
+}
+.status--pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 2px var(--space-3);
+  border-radius: 999px;
+  white-space: nowrap;
+  color: var(--card-ink);
+  background: var(--status-tint, var(--rail));
+}
+.status--pill::before {
+  margin-right: 0;
+}
+
+/* Callouts: an icon badge beside a headline and a sentence. Combine with .panel for an edge. */
+.callout {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  --callout-color: var(--solarized-blue);
+  --callout-tint: var(--tint-blue);
+}
+.callout[data-state="ok"] {
+  --callout-color: var(--solarized-green);
+  --callout-tint: var(--tint-green);
+}
+.callout[data-state="warn"] {
+  --callout-color: var(--solarized-yellow);
+  --callout-tint: var(--tint-yellow);
+}
+.callout[data-state="down"] {
+  --callout-color: var(--solarized-red);
+  --callout-tint: var(--tint-red);
+}
+.callout-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin-top: 2px;
+  border-radius: 50%;
+  font-family: var(--mono);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--callout-color);
+  background: var(--callout-tint);
+}
+.callout-title {
+  margin: 0 0 var(--space-1);
+  font-family: var(--sans);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: var(--ink);
+}
+.callout p {
+  margin: 0;
+}
+
+/* Tables that become labelled rows on narrow screens. Stacking changes how some browsers expose
+   the table, so give stacked tables explicit roles (see the README). */
+@media (max-width: 560px) {
+  .table--stack,
+  .table--stack tbody,
+  .table--stack tr,
+  .table--stack th,
+  .table--stack td {
+    display: block;
+  }
+  .table--stack thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .table--stack tr {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-1) var(--space-4);
+    padding: var(--space-4);
+  }
+  .table--stack tr + tr {
+    border-top: 1px solid var(--panel-divider);
+  }
+  .table--stack tr > * {
+    padding: 0;
+    text-align: start;
+  }
+  .table--stack td {
+    font-size: var(--text-small);
+  }
+  .panel-rows .table--stack tr + tr > *,
+  .panel-rows .table--stack td:last-child {
+    border-top: 0;
+    text-align: start;
+  }
+  .table--stack th {
+    flex: 1 1 100%;
+  }
+  .table--stack td[data-label]:not([data-label=""])::before {
+    content: attr(data-label) " ";
+    color: var(--ink-3);
+  }
+  .panel-rows > li {
+    padding: var(--space-4);
+  }
+  .panel {
+    padding: var(--space-4);
+  }
+  .panel.panel-rows {
+    padding: 0;
+  }
+}
+
+@media print {
+  .panel {
+    box-shadow: none;
+    border-color: #93a1a1;
+    background: none;
+  }
+  .status--pill {
+    background: none;
+    border: 1px solid #93a1a1;
+  }
+}
+@media (forced-colors: active) {
+  .panel {
+    border-color: CanvasText;
+  }
+  .panel-rows > li + li,
+  .panel-rows tr + tr > *,
+  .table--stack tr + tr {
+    border-color: CanvasText;
+  }
+  .status[data-state]::before,
+  .callout-icon {
+    forced-color-adjust: none;
+    background: CanvasText;
+    color: Canvas;
+  }
+  .status--pill {
+    border: 1px solid CanvasText;
+  }
+}

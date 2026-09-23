@@ -47,6 +47,7 @@
   --space-11: 44px;
   --space-12: 48px;
   --radius: 4px;
+  --radius-lg: 12px;
   --text-small: 0.875rem;
   --text-body: 1rem;
   --text-lead: 1.09375rem;
@@ -76,6 +77,14 @@
   --tint-red: var(--rail);
   --tint-magenta: var(--rail);
   --tint-violet: var(--rail);
+  /* Quiet panels: paper in light, the raised neutral in dark, edged by a faint rule. */
+  --panel: var(--solarized-base3);
+  --panel-ink: var(--solarized-base01);
+  --panel-border: var(--solarized-base2);
+  --panel-divider: var(--solarized-base2);
+  /* A soft shadow in light themes only. Without relative color support it is simply absent. */
+  --shadow-color: transparent;
+  --elevation: 0 1px 2px var(--shadow-color), 0 8px 24px var(--shadow-color);
 }
 @supports (color: light-dark(white, black)) {
   :root {
@@ -89,6 +98,10 @@
     --accent-ink: light-dark(var(--solarized-base02), var(--solarized-base1));
     --rail-ink: light-dark(var(--solarized-base02), var(--solarized-base1));
     --card-ink: light-dark(var(--solarized-base02), var(--solarized-base1));
+    --panel: light-dark(var(--solarized-base3), var(--solarized-base02));
+    --panel-ink: light-dark(var(--solarized-base01), var(--solarized-base1));
+    --panel-border: light-dark(var(--solarized-base2), var(--solarized-base02));
+    --panel-divider: light-dark(var(--solarized-base2), var(--solarized-base03));
   }
   :root:where([data-theme="light"]) {
     color-scheme: light;
@@ -132,5 +145,11 @@
       oklch(from var(--solarized-violet) 94% 0.025 h),
       oklch(from var(--solarized-violet) 28% 0.025 h)
     );
+  }
+}
+/* The one place color takes transparency: a shadow of the darkest Solarized base, light only. */
+@supports (color: oklch(from red l c h / 50%)) and (color: light-dark(white, black)) {
+  :root {
+    --shadow-color: light-dark(oklch(from var(--solarized-base03) l c h / 7%), transparent);
   }
 }

@@ -18,8 +18,9 @@ Run `actionlint` after editing workflows.
 
 ## Invariants
 
-- Color tokens use only the 16 exact Solarized sRGB values; never mix them or apply opacity.
+- Color tokens use only the 16 exact Solarized sRGB values; never mix them or apply opacity, except as below.
 - The only derived colors are the `--tint-*` tokens: `oklch(from var(--solarized-*) L C h)` keeps the source hue and changes only lightness and chroma, text on them must pass axe AA in both themes, and a bundle test enforces the form.
+- The only translucent color is `--shadow-color`: base03 at a few percent opacity through `oklch(from var(--solarized-base03) l c h / N%)`, in light themes only and never for text; a bundle test enforces it.
 - The API is token names, class names, `data-accent` values, `dist/` paths, and the theme-control markup; a change to any of them is `feat!`.
 - Every font ships with its license; keep `THIRD_PARTY_NOTICES.md` current.
 - Status and meaning never rely on color alone; keep focus visible and controls at least 44px.

@@ -40,7 +40,7 @@
     <h1>Calm surfaces.<br>Clear hierarchy.</h1>
     <p class="lead">A Solarized foundation for personal sites and internal tools. Readable prose, a little terminal character, and color that helps you find your place.</p>
     <nav class="cluster" aria-label="Design system sections">
-      <a href="#palette">Palette</a><a href="#type">Typography</a><a href="#content">Content</a><a href="#services">Services</a><a href="#patterns">Site patterns</a><a href="#reuse">Reuse</a><a href="article.html">Example article</a>
+      <a href="#palette">Palette</a><a href="#type">Typography</a><a href="#content">Content</a><a href="#services">Services</a><a href="#patterns">Site patterns</a><a href="#quiet">Quiet patterns</a><a href="#reuse">Reuse</a><a href="article.html">Example article</a><a href="status.html">Example status page</a>
     </nav>
   </header>
 
@@ -158,6 +158,32 @@
           <a rel="prev" href="#palette"><span class="meta">Older</span>Color and surfaces</a>
           <a rel="next" href="article.html"><span class="meta">Newer</span>Example article</a>
         </nav>
+      </div>
+    </div>
+  </section>
+
+  <section id="quiet" class="content-section" data-accent="green">
+    <h2 class="section-title"><span class="nerd-icon section-icon" aria-hidden="true">&#xf233;</span>Quiet patterns</h2>
+    <p>For dashboards and status pages: panels with a faint edge and a soft shadow in light themes, rows with dividers, and states that always name themselves. The <a href="status.html">example status page</a> uses nothing else.</p>
+    <div class="stack">
+      <div class="panel callout" data-state="warn">
+        <span class="callout-icon" aria-hidden="true">!</span>
+        <div><p class="callout-title">Some services are degraded</p><p>A callout pairs an icon badge with a headline; add <code>role="status"</code> when it updates live.</p></div>
+      </div>
+
+      <div>
+        <h3 class="section-label">Services</h3>
+        <ul class="panel panel-rows">
+          <li><div><span class="panel-title">Build runner</span><span class="panel-description">Available for the next job</span></div><span class="status" data-state="ok">Idle</span></li>
+          <li><div><span class="panel-title">Backup service</span><span class="panel-description">Scheduled work is in progress</span></div><span class="status" data-state="warn">Paused</span></li>
+          <li><div><span class="panel-title">Nightly import</span><span class="panel-description">The last run did not finish</span></div><span class="status" data-state="down">Failed</span></li>
+          <li><div><span class="panel-title">Search index</span><span class="panel-description">Rebuilt <span class="numeric">12,480</span> documents</span></div><span class="status" data-state="info">Rebuilding</span></li>
+        </ul>
+      </div>
+
+      <div class="panel">
+        <p class="panel-title">Pills</p>
+        <p class="cluster" style="margin-top: var(--space-3)"><span class="status status--pill" data-state="ok">Online</span><span class="status status--pill" data-state="warn">Degraded</span><span class="status status--pill" data-state="down">Outage</span><span class="status status--pill" data-state="info">Draft</span></p>
       </div>
     </div>
   </section>

@@ -84,10 +84,28 @@ test("derived tints come only from the exact accents' hues", () => {
   assert.doesNotMatch(css, /\b(rgba?|hsla?|hwb|lab|lch|color-mix)\(/);
 });
 
+test("transparency appears only in the shadow color, derived from an exact base", () => {
+  const translucent = [...css.matchAll(/oklch\(from (\S+) (\S+) (\S+) (\S+) \/ ([^)]+)\)/g)]
+    // The @supports feature test uses a placeholder color, not one that renders.
+    .filter(([, source]) => source !== "red");
+  assert.equal(translucent.length, 1, "one shadow color");
+  const [expression, source, l, c, h, alpha] = translucent[0];
+  assert.equal(source, "var(--solarized-base03)", expression);
+  assert.deepEqual([l, c, h], ["l", "c", "h"], `${expression} keeps its source color`);
+  assert.ok(Number.parseFloat(alpha) <= 10, `${expression} stays faint`);
+  const declaration = css.slice(0, translucent[0].index).split(/[;{]/).at(-1) ?? "";
+  assert.match(
+    declaration,
+    /--shadow-color:\s*light-dark\($/,
+    "only --shadow-color is translucent",
+  );
+  assert.doesNotMatch(css, /opacity\s*:/);
+});
+
 test("the reference site serves the package under assets/", async () => {
   const site = await siteFiles();
   for (const [path, bytes] of files) assert.deepEqual(site.get(`assets/${path}`), bytes);
-  for (const name of ["index.html", "article.html"]) {
+  for (const name of ["index.html", "article.html", "status.html"]) {
     const page = site.get(name)?.toString("utf8") ?? "";
     assert.doesNotMatch(page, /{{/, name);
     assert.match(page, /href="assets\/solarized-ui\.css"/, name);

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Example status page | solarized-ui</title>
+<meta name="description" content="A service status page built from the solarized-ui quiet patterns: panels, rows, status states, and a callout.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/solarized-ui.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<div class="page-column">
+  <header class="masthead masthead--plain">
+    <p class="masthead-title"><a href="index.html">Example Name</a></p>
+    <p class="meta">Service status</p>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <div class="panel callout" data-state="ok" role="status">
+      <span class="callout-icon" aria-hidden="true">&#x2713;</span>
+      <div>
+        <h1 class="callout-title">All systems operational</h1>
+        <p>Public services are responding and the home network is checking in.</p>
+      </div>
+    </div>
+
+    <section aria-labelledby="services-heading">
+      <h2 class="section-label" id="services-heading">Public services</h2>
+      <div class="panel panel-rows">
+        <table class="table--stack" role="table">
+          <thead class="visually-hidden" role="rowgroup">
+            <tr role="row"><th scope="col" role="columnheader">Service</th><th scope="col" role="columnheader">Status</th><th scope="col" role="columnheader">Latency</th></tr>
+          </thead>
+          <tbody role="rowgroup">
+            <tr role="row">
+              <th scope="row" role="rowheader"><a class="panel-title" href="#main">Website</a><span class="panel-description">Main site at www.example.net</span></th>
+              <td role="cell" data-label=""><span class="status" data-state="ok">Operational</span></td>
+              <td role="cell" class="numeric" data-label="Latency">5 ms</td>
+            </tr>
+            <tr role="row">
+              <th scope="row" role="rowheader"><a class="panel-title" href="#main">Domain redirect</a><span class="panel-description">example.net forwards visitors to the main site</span></th>
+              <td role="cell" data-label=""><span class="status" data-state="ok">Operational</span></td>
+              <td role="cell" class="numeric" data-label="Latency">8 ms</td>
+            </tr>
+            <tr role="row">
+              <th scope="row" role="rowheader"><a class="panel-title" href="#main">Résumé</a><span class="panel-description">Public résumé at resume.example.org</span></th>
+              <td role="cell" data-label=""><span class="status" data-state="warn">Degraded</span></td>
+              <td role="cell" class="numeric" data-label="Latency">1,204 ms</td>
+            </tr>
+            <tr role="row">
+              <th scope="row" role="rowheader"><a class="panel-title" href="#main">Blog</a><span class="panel-description">Writing and projects at example.org</span></th>
+              <td role="cell" data-label=""><span class="status" data-state="down">Outage</span></td>
+              <td role="cell" class="numeric" data-label="Latency">&ndash;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="network-heading">
+      <h2 class="section-label" id="network-heading">Home network</h2>
+      <ul class="panel panel-rows">
+        <li>
+          <div><span class="panel-title">Home network online</span><span class="panel-description">Last heartbeat 57 seconds ago.</span></div>
+          <span class="status status--pill" data-state="ok">Online</span>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="page-footer meta-row">
+    <p>Illustrative data, not live checks.</p>
+    <p>Last checked <time class="numeric" datetime="2026-09-23T05:26:28Z">2026-09-23 05:26 UTC</time></p>
+  </footer>
+</div>
+{{theme_control}}
+</body>
+</html>

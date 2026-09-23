@@ -439,6 +439,18 @@ test("marked rows take their state's tint and edge, and pills keep a ring", asyn
   expect(await down.evaluate((el) => getComputedStyle(el).backgroundColor)).toBe(tint);
 });
 
+test("a marked row's edge follows the text direction", async ({ page }) => {
+  await page.goto("/status.html");
+  const cell = page.locator('tr[data-state="down"] th');
+  expect(await cell.evaluate((el) => getComputedStyle(el).boxShadow)).toMatch(
+    / 6px 0px 0px 0px inset/,
+  );
+  await page.evaluate(() => document.documentElement.setAttribute("dir", "rtl"));
+  expect(await cell.evaluate((el) => getComputedStyle(el).boxShadow)).toMatch(
+    / -6px 0px 0px 0px inset/,
+  );
+});
+
 test("accent rows take their accent's tint and edge", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "light" });
   await page.goto("/");
@@ -462,7 +474,7 @@ test("the status table stacks into labelled rows on narrow screens", async ({ pa
   );
   // Latency follows the status: beside it, or on the next line when a pill leaves no room.
   expect(latency?.y ?? 0).toBeGreaterThanOrEqual((status?.y ?? 0) - 5);
-  expect(latency?.y ?? 0).toBeLessThan((status?.y ?? 0) + (status?.height ?? 0) * 2 + 8);
+  expect(latency?.y ?? 0).toBeLessThan((status?.y ?? 0) + (status?.height ?? 0) + 8);
   expect(
     await row
       .locator("td")

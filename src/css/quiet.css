@@ -255,6 +255,11 @@
 .panel-rows tr:is([data-state], [data-accent]) > :first-child {
   box-shadow: inset 6px 0 0 var(--row-color);
 }
+/* Box shadows have no logical offsets, so the edge moves to the right in right-to-left text. */
+.panel-rows > li:is([data-state], [data-accent]):dir(rtl),
+.panel-rows tr:is([data-state], [data-accent]):dir(rtl) > :first-child {
+  box-shadow: inset -6px 0 0 var(--row-color);
+}
 /* Between two tinted rows, the divider is a gap of plain panel. */
 .panel-rows > li:is([data-state], [data-accent]) + li:is([data-state], [data-accent]),
 .panel-rows tr:is([data-state], [data-accent]) + tr:is([data-state], [data-accent]) > * {
@@ -310,6 +315,9 @@
   .panel-rows .table--stack tr:is([data-state], [data-accent]) {
     background: var(--row-tint);
     box-shadow: inset 6px 0 0 var(--row-color);
+  }
+  .panel-rows .table--stack tr:is([data-state], [data-accent]):dir(rtl) {
+    box-shadow: inset -6px 0 0 var(--row-color);
   }
   .panel-rows .table--stack tr:is([data-state], [data-accent]) > * {
     background: none;

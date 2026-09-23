@@ -105,7 +105,9 @@
   vertical-align: middle;
   font-weight: inherit;
 }
-.panel-rows tr + tr > * {
+.panel-rows tr + tr > *,
+.panel-rows :where(tbody:has(> tr) ~ tbody) > tr:first-child > *,
+.panel-rows :where(table:has(> tbody > tr) > tfoot) > tr:first-child > * {
   border-top: 1px solid var(--panel-divider);
 }
 .panel-rows td:last-child {
@@ -268,9 +270,13 @@
 .panel-rows tr:is([data-state], [data-accent]):dir(rtl) > :first-child {
   box-shadow: inset -4px 0 0 var(--row-color);
 }
-/* Between two tinted rows, the divider is a gap of plain panel. */
+/* Between two tinted rows, the divider is a gap of plain panel, also across adjacent bodies. */
 .panel-rows > li:is([data-state], [data-accent]) + li:is([data-state], [data-accent]),
-.panel-rows tr:is([data-state], [data-accent]) + tr:is([data-state], [data-accent]) > * {
+.panel-rows tr:is([data-state], [data-accent]) + tr:is([data-state], [data-accent]) > *,
+.panel-rows
+  :where(tbody:has(> tr:last-child:is([data-state], [data-accent])) + tbody)
+  > tr:first-child:is([data-state], [data-accent])
+  > * {
   border-top-color: var(--panel);
 }
 .panel-rows :is(li, tr):is([data-state], [data-accent]) .status--pill {
@@ -331,7 +337,8 @@
     gap: var(--space-1) var(--space-4);
     padding: var(--space-4);
   }
-  .table--stack tr + tr {
+  .table--stack tr + tr,
+  .table--stack :where(:is(tbody, tfoot):has(> tr) ~ :is(tbody, tfoot)) > tr:first-child {
     border-top: 1px solid var(--panel-divider);
   }
   .table--stack tr > * {
@@ -342,6 +349,11 @@
     font-size: var(--text-small);
   }
   .panel-rows .table--stack tr + tr > *,
+  .panel-rows
+    .table--stack
+    :where(:is(tbody, tfoot):has(> tr) ~ :is(tbody, tfoot))
+    > tr:first-child
+    > *,
   .panel-rows .table--stack td:last-child {
     border-top: 0;
     text-align: start;
@@ -373,10 +385,11 @@
     background: none;
     box-shadow: none;
   }
+  .panel-rows .table--stack tr:is([data-state], [data-accent]) + tr:is([data-state], [data-accent]),
   .panel-rows
     .table--stack
-    tr:is([data-state], [data-accent])
-    + tr:is([data-state], [data-accent]) {
+    :where(tbody:has(> tr:last-child:is([data-state], [data-accent])) + tbody)
+    > tr:first-child:is([data-state], [data-accent]) {
     border-top-color: var(--panel);
   }
   .table--stack td[data-label]:not([data-label=""])::before {
@@ -440,7 +453,10 @@
   }
   .panel-rows > li + li,
   .panel-rows tr + tr > *,
-  .table--stack tr + tr {
+  .panel-rows :where(tbody:has(> tr) ~ tbody) > tr:first-child > *,
+  .panel-rows :where(table:has(> tbody > tr) > tfoot) > tr:first-child > *,
+  .table--stack tr + tr,
+  .table--stack :where(:is(tbody, tfoot):has(> tr) ~ :is(tbody, tfoot)) > tr:first-child {
     border-color: CanvasText;
   }
   .status[data-state]::before,

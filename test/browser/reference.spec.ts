@@ -485,6 +485,19 @@ function misplacedCorners(panel: HTMLElement): string[] {
   });
 }
 
+/** Lists each of the panel table's rows that lacks a divider above it, or has one while on top. */
+function misplacedDividers(panel: HTMLElement): string[] {
+  const stacked = getComputedStyle(panel.querySelector("tr") as Element).display === "flex";
+  const ordered = [...panel.querySelectorAll(":scope > table > :not(thead) > tr")].sort(
+    (a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top,
+  );
+  return ordered.flatMap((tr, index) => {
+    const edge = (stacked ? tr : tr.firstElementChild) as Element;
+    const divided = getComputedStyle(edge).borderTopWidth !== "0px";
+    return divided === index > 0 ? [] : [edge.textContent ?? ""];
+  });
+}
+
 for (const width of [1440, 320]) {
   test(`only rows touching the panel's corners curve, at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
@@ -495,6 +508,9 @@ for (const width of [1440, 320]) {
         el.innerHTML = `<table class="table--stack">${inner}</table>`;
       }, html);
       expect(await panel.evaluate(misplacedCorners), shape).toEqual([]);
+      if (!shape.includes("visible")) {
+        expect(await panel.evaluate(misplacedDividers), shape).toEqual([]);
+      }
     }
   });
 }

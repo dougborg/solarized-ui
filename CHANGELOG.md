@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.1](https://github.com/dougborg/solarized-ui/compare/v0.5.0...v0.5.1) (2026-09-23)
+
+
+### Bug Fixes
+
+* give callouts and marked rows the same curved leading edge ([#13](https://github.com/dougborg/solarized-ui/issues/13)) ([083fa68](https://github.com/dougborg/solarized-ui/commit/083fa68d110e4e4e6e85abcf3d048a84363c7545))
+* harden the curved leading edge and panel table dividers ([#16](https://github.com/dougborg/solarized-ui/issues/16)) ([757ce58](https://github.com/dougborg/solarized-ui/commit/757ce580fb7355cde0e9a6afa881974edb232ad6))
+
 ## [0.5.0](https://github.com/dougborg/solarized-ui/compare/v0.4.0...v0.5.0) (2026-09-23)
 
 

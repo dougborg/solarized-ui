@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/dougborg/solarized-ui/compare/v0.2.0...v0.3.0) (2026-09-23)
+
+
+### Features
+
+* add shared site components and accent tints ([#7](https://github.com/dougborg/solarized-ui/issues/7)) ([784bf67](https://github.com/dougborg/solarized-ui/commit/784bf67be66f05b4adb5b5f92fcf4b99e336917f))
+
 ## [0.2.0](https://github.com/dougborg/solarized-ui/compare/v0.1.0...v0.2.0) (2026-09-23)
 
 

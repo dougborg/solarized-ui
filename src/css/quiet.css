@@ -43,6 +43,7 @@
   padding: var(--space-4) var(--space-6);
   color: var(--ink);
   background: var(--panel);
+  /* Marked rows round their outer corners to the inner radius, radius-lg minus this 1px. */
   border: 1px solid var(--panel-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--elevation);
@@ -222,18 +223,7 @@
 
 /* Marked rows: a panel row with data-state or data-accent takes that color's tint and a leading
    edge. Text switches to card ink, which keeps 4.5:1 on every tint. A pill inside sits on the
-   plain panel with a ring, so it stays visible on the tint. The outer rows round their leading
-   corners to the panel's inner radius, so an edge curves at the panel's corners as a callout's
-   does. */
-.panel-rows > li:first-child,
-.panel-rows table > :not(.visually-hidden):first-child > tr:first-child > :first-child,
-.panel-rows table > .visually-hidden:first-child + * > tr:first-child > :first-child {
-  border-start-start-radius: calc(var(--radius-lg) - 1px);
-}
-.panel-rows > li:last-child,
-.panel-rows table > :last-child > tr:last-child > :first-child {
-  border-end-start-radius: calc(var(--radius-lg) - 1px);
-}
+   plain panel with a ring, so it stays visible on the tint. */
 .panel-rows > li[data-state="ok"],
 .panel-rows tr[data-state="ok"] {
   --row-color: var(--solarized-green);
@@ -289,6 +279,23 @@
   box-shadow: inset 0 0 0 2px var(--status-color, var(--row-color));
 }
 
+/* The outer rows round their leading corners to the panel's inner radius, so an edge curves at
+   the panel's corners as a callout's does. A table's first body row is on top unless a visible
+   caption or head sits above it, and a foot always renders last, wherever it is in the source. */
+.panel-rows > li:first-child,
+.panel-rows
+  table:not(:has(> :is(caption, thead):not(.visually-hidden)))
+  > tbody:first-of-type
+  > tr:first-child
+  > :first-child {
+  border-start-start-radius: calc(var(--radius-lg) - 1px);
+}
+.panel-rows > li:last-child,
+.panel-rows table:not(:has(> tfoot)) > tbody:last-of-type > tr:last-child > :first-child,
+.panel-rows table > tfoot > tr:last-child > :first-child {
+  border-end-start-radius: calc(var(--radius-lg) - 1px);
+}
+
 /* Tables that become labelled rows on narrow screens. Stacking changes how some browsers expose
    the table, so give stacked tables explicit roles (see the README). */
 @media (max-width: 560px) {
@@ -331,11 +338,14 @@
   .table--stack th {
     flex: 1 1 100%;
   }
-  .panel-rows .table--stack > thead:first-child + * > tr:first-child,
-  .panel-rows .table--stack > :not(thead):first-child > tr:first-child {
+  /* Stacked, the head is out of the flow and the groups render in source order. */
+  .panel-rows
+    .table--stack:not(:has(> caption:not(.visually-hidden)))
+    > :is(tbody, tfoot):not(:is(tbody, tfoot) ~ *)
+    > tr:first-child {
     border-start-start-radius: calc(var(--radius-lg) - 1px);
   }
-  .panel-rows .table--stack > :last-child > tr:last-child {
+  .panel-rows .table--stack > :is(tbody, tfoot):last-child > tr:last-child {
     border-end-start-radius: calc(var(--radius-lg) - 1px);
   }
   .panel-rows .table--stack tr:is([data-state], [data-accent]) {
@@ -384,9 +394,32 @@
   }
   .callout--tinted,
   .panel-rows > li:is([data-state], [data-accent]),
-  .panel-rows tr:is([data-state], [data-accent]) > * {
+  .panel-rows tr:is([data-state], [data-accent]) > *,
+  .panel-rows .table--stack tr:is([data-state], [data-accent]) {
     background: none;
     box-shadow: none;
+  }
+  /* Borders print where shadows may not, so the edge becomes one. */
+  .callout--tinted {
+    border-inline-start: 4px solid var(--callout-color);
+  }
+  .panel-rows > li:is([data-state], [data-accent]),
+  .panel-rows tr:is([data-state], [data-accent]) > :first-child {
+    border-inline-start: 4px solid var(--row-color);
+  }
+}
+/* Stacked, the row carries the edge, so its first cell drops the one it would get below. */
+@media print and (max-width: 560px) {
+  .panel-rows .table--stack tr:is([data-state], [data-accent]) {
+    border-inline-start: 4px solid var(--row-color);
+  }
+  .panel-rows .table--stack tr:is([data-state], [data-accent]) > :first-child {
+    border-inline-start: 0;
+  }
+}
+@media (forced-colors: active) and (max-width: 560px) {
+  .panel-rows .table--stack tr:is([data-state], [data-accent]) > :first-child {
+    border-inline-start: 0;
   }
 }
 @media (forced-colors: active) {

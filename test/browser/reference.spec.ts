@@ -440,6 +440,10 @@ test("marked rows take their state's tint and edge, and pills keep a ring", asyn
   await expect(rows.first().locator("th")).toHaveCSS("border-top-left-radius", "11px");
   await expect(rows.last().locator("th")).toHaveCSS("border-bottom-left-radius", "11px");
   await expect(rows.nth(1).locator("th")).toHaveCSS("border-top-left-radius", "0px");
+  // A one-row list is both the first and the last row.
+  const only = page.locator("ul.panel-rows > li").first();
+  await expect(only).toHaveCSS("border-top-left-radius", "11px");
+  await expect(only).toHaveCSS("border-bottom-left-radius", "11px");
 
   await page.setViewportSize({ width: 320, height: 900 });
   // Stacked, the row itself carries the tint and edge.
@@ -512,4 +516,13 @@ test("quiet patterns keep their edges in forced colors and drop shadows in print
   expect(await axeViolations(page)).toEqual([]);
   await page.emulateMedia({ forcedColors: "none", media: "print" });
   await expect(panel).toHaveCSS("box-shadow", "none");
+  // Shadows are dropped in print, so the leading edges become borders.
+  await expect(page.locator(".callout--tinted")).toHaveCSS(
+    "border-left",
+    "4px solid rgb(220, 50, 47)",
+  );
+  await expect(page.locator('tr[data-state="down"] th')).toHaveCSS(
+    "border-left",
+    "4px solid rgb(220, 50, 47)",
+  );
 });

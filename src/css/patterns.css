@@ -67,16 +67,17 @@
 }
 .timeline-list > li {
   position: relative;
-  padding: 0 0 var(--space-6) calc(var(--timeline-axis) * 2 + var(--space-6));
+  padding-block: 0 var(--space-6);
+  padding-inline: calc(var(--timeline-axis) * 2 + var(--space-6)) 0;
 }
 .timeline-list > li:last-child {
-  padding-bottom: 0;
+  padding-block-end: 0;
 }
 /* The rail below each marker belongs to its item, so accents change where items do. */
 .timeline-list > li::before {
   content: "";
   position: absolute;
-  left: calc(var(--timeline-axis) - 1px);
+  inset-inline-start: calc(var(--timeline-axis) - 1px);
   top: var(--timeline-top);
   bottom: 0;
   width: 2px;
@@ -85,7 +86,7 @@
 .timeline-list > li::after {
   content: "";
   position: absolute;
-  left: 0;
+  inset-inline-start: 0;
   top: var(--timeline-top);
   width: calc(var(--timeline-axis) * 2);
   height: calc(var(--timeline-axis) * 2);
@@ -105,7 +106,7 @@
 }
 .timeline-marker {
   position: absolute;
-  left: 0;
+  inset-inline-start: 0;
   top: 0;
   display: grid;
   place-items: center;
@@ -114,6 +115,7 @@
   border: 2px solid var(--section-accent, var(--accent));
   border-radius: 50%;
   background: var(--paper);
+  /* The strongest ink on paper; initials are small, so they need it more than an accent. */
   color: var(--accent-ink);
   font-family: var(--mono);
   font-size: 11px;

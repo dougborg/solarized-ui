@@ -70,7 +70,7 @@ Reserve `var(--control-gutter)` at the right and at least 60px at the bottom so 
 | `--accent`, `--accent-ink`, `--rule` | Controls, hover/focus, and separators |
 | `--solarized-*` | The exact 16 official Solarized sRGB values |
 | `--tone-{blue,cyan,green,yellow,orange,red,magenta,violet}` | Unmodified accent aliases, identical in light and dark |
-| `--tint-{accent}`, `--section-tint` | Quiet surfaces derived from each accent's hue; `data-accent` sets `--section-tint` |
+| `--tint-{accent}`, `--section-tint` | Quiet surfaces derived from each accent's hue; `data-accent` sets `--section-tint`, which only `.surface[data-tint]` and `.card` paint |
 | `--accent-band` | Six-accent hard-stop gradient (blue, cyan, green, yellow, orange, magenta) |
 | `--sans`, `--mono`, `--text-*`, `--leading`, `--measure` | Mixed typography and 68ch reading measure |
 | `--space-*`, `--radius` | Shared spacing scale and 4px corners |

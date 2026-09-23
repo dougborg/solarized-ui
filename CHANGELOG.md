@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/dougborg/solarized-ui/compare/v0.4.0...v0.5.0) (2026-09-23)
+
+
+### Features
+
+* add marked rows and tinted callouts ([#11](https://github.com/dougborg/solarized-ui/issues/11)) ([c6b504b](https://github.com/dougborg/solarized-ui/commit/c6b504b00c7487efe6e91c2b53a4b204df1c1d4f))
+
 ## [0.4.0](https://github.com/dougborg/solarized-ui/compare/v0.3.0...v0.4.0) (2026-09-23)
 
 

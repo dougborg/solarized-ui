@@ -73,7 +73,9 @@ Reserve `var(--control-gutter)` at the right and at least 60px at the bottom so 
 | `--tint-{accent}`, `--section-tint` | Quiet surfaces derived from each accent's hue; `data-accent` sets `--section-tint`, which only `.surface[data-tint]` and `.card` paint |
 | `--accent-band` | Six-accent hard-stop gradient (blue, cyan, green, yellow, orange, magenta) |
 | `--sans`, `--mono`, `--text-*`, `--leading`, `--measure` | Mixed typography and 68ch reading measure |
-| `--space-*`, `--radius` | Shared spacing scale and 4px corners |
+| `--space-*`, `--radius`, `--radius-lg` | Shared spacing scale, 4px corners, and 12px panel corners |
+| `--panel`, `--panel-ink`, `--panel-border`, `--panel-divider` | Quiet panel surface, text, edge, and row dividers |
+| `--shadow-color`, `--elevation` | A faint two-layer shadow in light themes; transparent in dark themes and without relative color |
 | `.content-section`, `.section-title`, `data-accent` | Accent scope and lowercase section heading |
 | `.surface`, `--card-padding` | Borderless grouped content with optional padding override |
 | `.surface[data-tint]` | A surface tinted from its `data-accent` |
@@ -96,6 +98,16 @@ Reserve `var(--control-gutter)` at the right and at least 60px at the bottom so 
 | `.chip-list`, `.chip` | Static tags, optionally with a leading `.nerd-icon` |
 | `.pager` | Older and newer links (`rel="prev"`, `rel="next"`) at the end of a page |
 | `.read-progress` | A CSS-only reading bar fixed to the top; hidden without scroll timelines, under reduced motion, and in print |
+| `.panel`, `.panel-title`, `.panel-description` | A bordered, softly raised group with a title and a muted line |
+| `.panel-rows` | Put on a panel `ul`/`ol`, or on a panel wrapping a `table`: rows with dividers, title on the start side and a value or status on the end side |
+| `.status[data-state]` | `ok`, `warn`, `down`, or `info`: a round dot in green, yellow, red, or blue beside the label, which stays in ink |
+| `.status--pill` | A status on its tint, for standalone badges |
+| `.callout`, `.callout-icon`, `.callout-title` | An icon badge beside a headline and sentence, toned by `data-state` (`ok`, `warn`, or `down`; without one it uses the blue accent, which also serves as info); combine with `.panel`, and add `role="status"` when it updates live |
+| `.section-label` | A small, muted, sans-serif heading for a group of panels, quieter than `.section-title` |
+| `.numeric` | Tabular figures that never wrap, for latencies, counts, and dates |
+| `.table--stack` | A table that becomes labelled rows below 560px, using each cell's `data-label`; give it explicit ARIA table roles, since stacking hides its table semantics in some browsers, as `reference/status.html` does |
+| `.masthead--plain` | A masthead without its rule |
+| `.visually-hidden` | Hidden visually but kept for assistive technology, such as a table's header row |
 | `.prose` | Long-form writing: headings, lists, quotes, wrapped code blocks, tables, figures, rules, and footnotes |
 | `.token.*` | Prism syntax tokens, highlighted by weight and style only, never by color |
 
@@ -105,10 +117,13 @@ Use sans-serif for prose, titles within entries, and data; monospace for section
 Preserve proper nouns.
 Use a visible label for each status: color alone must never mean success, maintenance, or failure.
 Use the [official Solarized values](https://ethanschoonover.com/solarized/#the-values) for every color token, without mixing or opacity.
-The one exception is the tints: each `--tint-*` keeps its accent's own hue and changes only lightness and chroma (`oklch(from var(--solarized-*) L C h)`), so it adds no new color; browsers without relative color fall back to the neutral raised surface.
+There are two exceptions.
+The tints: each `--tint-*` keeps its accent's own hue and changes only lightness and chroma (`oklch(from var(--solarized-*) L C h)`), so it adds no new color; browsers without relative color fall back to the neutral raised surface.
+The shadow: `--shadow-color` is base03 with a few percent opacity (`oklch(from var(--solarized-base03) l c h / 7%)`) in light themes and transparent in dark ones; it is the only color with transparency, and it never carries text.
 Accents belong on decorative glyphs, rules, swatches, and markers.
 Small text and links use Solarized neutrals; underlines identify links.
 Status text has a colored marker, so the exact red does not have to meet text contrast on a dark surface.
+State labels stay in ink because Solarized green and yellow fall below 4.5:1 as small text on the light background; the dot repeats the state in color.
 Plain surfaces use the exact secondary background; tinted cards keep the card text color, which meets AA on every tint in both themes.
 Stable hue tokens retain their values across themes.
 
@@ -124,6 +139,7 @@ See the [example article](https://dougborg.org/solarized-ui/article.html) for th
 For code highlighting, use a highlighter that emits Prism token classes, such as Astro's `syntaxHighlight: "prism"`; highlighters that write inline colors bypass the contrast rules above.
 Class names are global and unprefixed, so check them against any other stylesheet an application loads.
 The timeline is `.timeline-list`, not `.timeline`, because the résumé already uses that name.
+See the [example status page](https://dougborg.org/solarized-ui/status.html) for the quiet patterns together.
 
 ## Versioning
 

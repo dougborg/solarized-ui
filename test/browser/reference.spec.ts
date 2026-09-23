@@ -368,3 +368,90 @@ test("site patterns stay visible in forced colors", async ({ page }) => {
   ).not.toMatch(/rgba\(0, 0, 0, 0\)/);
   expect((await new AxeBuilder({ page }).include("#patterns").analyze()).violations).toEqual([]);
 });
+
+const axeViolations = async (page: Page) =>
+  (await new AxeBuilder({ page }).analyze()).violations.map((violation) => ({
+    id: violation.id,
+    nodes: violation.nodes.map((node) => node.target),
+  }));
+
+for (const colorScheme of ["light", "dark"] as const) {
+  for (const width of [320, 1440]) {
+    test(`status page ${colorScheme} at ${width}px is accessible and quiet`, async ({
+      page,
+    }, info) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.emulateMedia({ colorScheme });
+      await page.goto("/status.html");
+      await page.evaluate(() => document.fonts.ready);
+      await expectReflow(page);
+      expect(await axeViolations(page)).toEqual([]);
+      await expect(page.getByRole("status").first()).toContainText("All systems operational");
+      for (const state of ["Operational", "Degraded", "Outage", "Online"]) {
+        await expect(page.getByText(state, { exact: true }).first()).toBeVisible();
+      }
+      const shadow = await page
+        .locator(".panel")
+        .first()
+        .evaluate((el) => getComputedStyle(el).boxShadow);
+      if (colorScheme === "light") expect(shadow).toMatch(/oklch|rgba?\(/);
+      else expect(shadow).toMatch(/none|rgba\(0, 0, 0, 0\)|oklch\([^)]*\/ 0\)|transparent/);
+      await page.screenshot({
+        path: info.outputPath(`status-${colorScheme}-${width}.png`),
+        fullPage: true,
+      });
+    });
+  }
+}
+
+test("a forced theme switches the quiet surfaces too", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "light" });
+  await page.goto("/status.html");
+  await page.evaluate(() => document.documentElement.setAttribute("data-theme", "dark"));
+  const panel = page.locator(".panel").first();
+  await expect(panel).toHaveCSS("background-color", "rgb(7, 54, 66)");
+  // Dark panels have no shadow, so their edge must differ from their surface.
+  await expect(panel).toHaveCSS("border-top-color", "rgb(88, 110, 117)");
+  expect(await axeViolations(page)).toEqual([]);
+});
+
+test("the status table stacks into labelled rows on narrow screens", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 900 });
+  await page.goto("/status.html");
+  const row = page.locator(".table--stack tbody tr").first();
+  const [name, status, latency] = await Promise.all(
+    ["th", "td >> nth=0", "td >> nth=1"].map((cell) => row.locator(cell).boundingBox()),
+  );
+  expect(status && name && status.y).toBeGreaterThanOrEqual(
+    (name?.y ?? 0) + (name?.height ?? 0) - 1,
+  );
+  expect(latency?.y).toBeCloseTo(status?.y ?? 0, -1);
+  expect(
+    await row
+      .locator("td")
+      .nth(1)
+      .evaluate((el) => getComputedStyle(el, "::before").content),
+  ).toBe('"Latency "');
+  await expect(page.getByRole("rowheader", { name: /Website/ })).toBeVisible();
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await expect(row.locator("td").nth(1)).toHaveCSS("display", "table-cell");
+});
+
+test("quiet patterns keep their edges in forced colors and drop shadows in print", async ({
+  page,
+}) => {
+  await page.goto("/status.html");
+  await page.emulateMedia({ forcedColors: "active" });
+  const panel = page.locator(".panel").first();
+  await expect(panel).not.toHaveCSS("border-top-style", "none");
+  expect(
+    await page
+      .locator(".status[data-state]")
+      .first()
+      .evaluate((el) => getComputedStyle(el, "::before").backgroundColor),
+  ).not.toMatch(/rgba\(0, 0, 0, 0\)/);
+  expect(await axeViolations(page)).toEqual([]);
+  await page.emulateMedia({ forcedColors: "none", media: "print" });
+  await expect(panel).toHaveCSS("box-shadow", "none");
+});

@@ -75,7 +75,9 @@ test("the stylesheet uses only the exact Solarized values", () => {
 test("the reference site serves the package under assets/", async () => {
   const site = await siteFiles();
   for (const [path, bytes] of files) assert.deepEqual(site.get(`assets/${path}`), bytes);
-  const page = site.get("index.html")?.toString("utf8") ?? "";
-  assert.doesNotMatch(page, /{{/);
-  assert.match(page, /href="assets\/solarized-ui\.css"/);
+  for (const name of ["index.html", "article.html"]) {
+    const page = site.get(name)?.toString("utf8") ?? "";
+    assert.doesNotMatch(page, /{{/, name);
+    assert.match(page, /href="assets\/solarized-ui\.css"/, name);
+  }
 });

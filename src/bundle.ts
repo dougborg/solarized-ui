@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { stripTypeScriptTypes } from "node:module";
 
 /** Stylesheet sources, concatenated in cascade order. */
-const stylesheets = ["fonts", "tokens", "base", "components"] as const;
+const stylesheets = ["fonts", "tokens", "base", "components", "site", "prose"] as const;
 
 const fontsource = {
   "ibm-plex-sans": ["400-normal", "500-normal", "600-normal", "700-normal", "400-italic"],
@@ -47,11 +47,10 @@ export async function siteFiles(): Promise<Map<string, Buffer>> {
   const files = new Map<string, Buffer>();
   for (const [path, bytes] of await packageFiles()) files.set(`assets/${path}`, bytes);
   const control = await readFile("src/theme-control.html", "utf8");
-  const page = (await readFile("reference/index.html", "utf8")).replace(
-    "{{theme_control}}",
-    control,
-  );
-  files.set("index.html", Buffer.from(page));
+  for (const page of ["index.html", "article.html"]) {
+    const html = await readFile(`reference/${page}`, "utf8");
+    files.set(page, Buffer.from(html.replace("{{theme_control}}", control)));
+  }
   files.set("favicon.svg", await readFile("reference/favicon.svg"));
   return files;
 }

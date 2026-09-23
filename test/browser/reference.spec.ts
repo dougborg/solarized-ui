@@ -440,6 +440,10 @@ test("marked rows take their state's tint and edge, and pills keep a ring", asyn
   await expect(rows.first().locator("th")).toHaveCSS("border-top-left-radius", "11px");
   await expect(rows.last().locator("th")).toHaveCSS("border-bottom-left-radius", "11px");
   await expect(rows.nth(1).locator("th")).toHaveCSS("border-top-left-radius", "0px");
+  // A one-row list is both the first and the last row.
+  const only = page.locator("ul.panel-rows > li").first();
+  await expect(only).toHaveCSS("border-top-left-radius", "11px");
+  await expect(only).toHaveCSS("border-bottom-left-radius", "11px");
 
   await page.setViewportSize({ width: 320, height: 900 });
   // Stacked, the row itself carries the tint and edge.
@@ -447,6 +451,83 @@ test("marked rows take their state's tint and edge, and pills keep a ring", asyn
   expect(await down.evaluate((el) => getComputedStyle(el).backgroundColor)).toBe(tint);
   await expect(down).toHaveCSS("border-bottom-left-radius", "11px");
 });
+
+const row = (name: string) => `<tr data-state="down"><th>${name}</th><td>x</td></tr>`;
+const rows = (...names: string[]) => `<tbody>${names.map(row).join("")}</tbody>`;
+const hiddenHead = '<thead class="visually-hidden"><tr><th>A</th><th>B</th></tr></thead>';
+const tableShapes: Record<string, string> = {
+  "a hidden head": hiddenHead + rows("a", "b", "c"),
+  "no head": rows("a", "b"),
+  "a visible head": `<thead><tr><th>A</th><th>B</th></tr></thead>${rows("a", "b")}`,
+  "a visible caption": `<caption>Services</caption>${rows("a", "b")}`,
+  "a hidden caption": `<caption class="visually-hidden">Services</caption>${rows("a", "b")}`,
+  "several bodies": hiddenHead + rows("a", "b") + rows("c", "d"),
+  "an empty first body": `${hiddenHead}<tbody></tbody>${rows("a", "b")}<tbody></tbody>`,
+  "a foot before the body": `${hiddenHead}<tfoot>${row("f")}</tfoot>${rows("a", "b")}`,
+  "a foot after the body": `${hiddenHead}${rows("a", "b")}<tfoot>${row("f")}</tfoot>`,
+  "accent rows": `${hiddenHead}<tbody><tr data-accent="cyan"><th>a</th><td>x</td></tr></tbody>${rows("b")}`,
+  "a single row": hiddenHead + rows("a"),
+  "a nested table": `<tbody><tr data-state="down"><th>a</th><td><table>${rows("n", "m")}</table></td></tr></tbody>`,
+};
+
+/** Lists each marked row whose rounded leading corners differ from the panel corners it touches. */
+function misplacedCorners(panel: HTMLElement): string[] {
+  const stacked = getComputedStyle(panel.querySelector("tr") as Element).display === "flex";
+  const box = panel.getBoundingClientRect();
+  return [...panel.querySelectorAll("tr[data-state]")].flatMap((tr) => {
+    const edge = (stacked ? tr : tr.firstElementChild) as Element;
+    const rect = edge.getBoundingClientRect();
+    const style = getComputedStyle(edge);
+    const top = Math.abs(rect.top - box.top - 1) < 1.5;
+    const bottom = Math.abs(rect.bottom - box.bottom + 1) < 1.5;
+    const rounded = [style.borderStartStartRadius, style.borderEndStartRadius].map(
+      (r) => r !== "0px",
+    );
+    return rounded[0] === top && rounded[1] === bottom ? [] : [edge.textContent ?? ""];
+  });
+}
+
+/**
+ * Lists each visible row of the panel's table whose divider is wrong: every row below the first
+ * has one, and it is a gap of plain panel exactly when both rows it separates are tinted.
+ */
+function misplacedDividers(panel: HTMLElement): string[] {
+  const stacked = getComputedStyle(panel.querySelector("tr") as Element).display === "flex";
+  const groups = stacked ? ":not(thead)" : ":not(thead.visually-hidden)";
+  const ordered = [...panel.querySelectorAll(`:scope > table > ${groups} > tr`)].sort(
+    (a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top,
+  );
+  const plain = getComputedStyle(panel).backgroundColor;
+  return ordered.flatMap((tr, index) => {
+    const style = getComputedStyle((stacked ? tr : tr.firstElementChild) as Element);
+    const gap = [tr, ordered[index - 1]].every((r) => r?.matches("[data-state], [data-accent]"));
+    const right =
+      (style.borderTopWidth !== "0px") === index > 0 &&
+      (index === 0 || (style.borderTopColor === plain) === gap);
+    return right ? [] : [tr.textContent ?? ""];
+  });
+}
+
+for (const [width, dir] of [
+  [1440, "ltr"],
+  [320, "ltr"],
+  [1440, "rtl"],
+  [320, "rtl"],
+] as const) {
+  test(`only rows touching the panel's corners curve, at ${width}px ${dir}`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/status.html");
+    await page.evaluate((d) => document.documentElement.setAttribute("dir", d), dir);
+    const panel = page.locator(".panel.panel-rows").first();
+    for (const [shape, html] of Object.entries(tableShapes)) {
+      await panel.evaluate((el, inner) => {
+        el.innerHTML = `<table class="table--stack">${inner}</table>`;
+      }, html);
+      expect(await panel.evaluate(misplacedCorners), shape).toEqual([]);
+      expect(await panel.evaluate(misplacedDividers), shape).toEqual([]);
+    }
+  });
+}
 
 test("a marked row's edge follows the text direction", async ({ page }) => {
   await page.goto("/status.html");
@@ -509,7 +590,20 @@ test("quiet patterns keep their edges in forced colors and drop shadows in print
       .first()
       .evaluate((el) => getComputedStyle(el, "::before").backgroundColor),
   ).not.toMatch(/rgba\(0, 0, 0, 0\)/);
+  // Wide, the first cell carries the edge and the row does not, so there is only one.
+  const marked = page.locator('tr[data-state="down"]');
+  await expect(marked).toHaveCSS("border-left-width", "0px");
+  await expect(marked.locator("th")).toHaveCSS("border-left-width", "4px");
   expect(await axeViolations(page)).toEqual([]);
   await page.emulateMedia({ forcedColors: "none", media: "print" });
   await expect(panel).toHaveCSS("box-shadow", "none");
+  // Shadows are dropped in print, so the leading edges become borders.
+  await expect(page.locator(".callout--tinted")).toHaveCSS(
+    "border-left",
+    "4px solid rgb(220, 50, 47)",
+  );
+  await expect(page.locator('tr[data-state="down"] th')).toHaveCSS(
+    "border-left",
+    "4px solid rgb(220, 50, 47)",
+  );
 });

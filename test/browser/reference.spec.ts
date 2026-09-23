@@ -223,12 +223,27 @@ for (const colorScheme of ["light", "dark"] as const) {
       await expect(code.locator(".token.keyword").first()).toHaveCSS("color", ink);
       await expect(code.locator(".token.comment").first()).toHaveCSS("font-style", "italic");
       await expect(code.locator(".token.comment").first()).toHaveCSS("color", ink);
-      const column = await page.locator(".page-column").boundingBox();
+      // At the end of the page the floating theme control must not cover any text.
+      await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
       const toggle = await page.locator(".theme-toggle").boundingBox();
-      expect((column?.x ?? 0) + (column?.width ?? 0)).toBeLessThanOrEqual(width);
-      expect(toggle?.x ?? 0).toBeGreaterThanOrEqual(
-        (await page.locator(".prose").boundingBox())?.x ?? 0,
-      );
+      const covered = await page.evaluate((box) => {
+        if (!box) return ["no toggle"];
+        const overlaps = (rect: DOMRect) =>
+          rect.right > box.x &&
+          rect.left < box.x + box.width &&
+          rect.bottom > box.y &&
+          rect.top < box.y + box.height;
+        const hits: string[] = [];
+        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+        for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+          if (!node.textContent?.trim() || node.parentElement?.closest(".theme-toggle")) continue;
+          const range = document.createRange();
+          range.selectNodeContents(node);
+          if ([...range.getClientRects()].some(overlaps)) hits.push(node.textContent.trim());
+        }
+        return hits;
+      }, toggle);
+      expect(covered).toEqual([]);
       await page.screenshot({ path: info.outputPath("article.png"), fullPage: true });
     });
   }
@@ -252,4 +267,27 @@ test("article keeps content without scripts and drops navigation in print", asyn
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await expect(page.locator("body")).toHaveCSS("color", "rgb(0, 0, 0)");
   await context.close();
+});
+
+test("article supports keyboard navigation and forced colors", async ({ page }) => {
+  await page.goto("/article.html");
+  await page.keyboard.press("Tab");
+  await expect(page.locator(".skip-link")).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(page.locator(".masthead-title a")).toBeFocused();
+  for (const name of ["Components", "Article", "Source"]) {
+    await page.keyboard.press("Tab");
+    const link = page.locator(".site-nav").getByRole("link", { name });
+    await expect(link).toBeFocused();
+    await expect(link).toHaveCSS("outline-style", "solid");
+  }
+  await page.keyboard.press("Shift+Tab");
+  await page.keyboard.press("Shift+Tab");
+  await page.keyboard.press("Shift+Tab");
+  await page.keyboard.press("Shift+Tab");
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("main")).toBeFocused();
+  await page.emulateMedia({ forcedColors: "active" });
+  await expect(page.locator(".masthead")).not.toHaveCSS("border-bottom-style", "none");
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
 });

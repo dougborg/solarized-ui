@@ -81,7 +81,7 @@ Reserve `var(--control-gutter)` at the right and at least 60px at the bottom so 
 | `.action`, `.status` | Outlined link/action and explicit textual status |
 | `.nerd-icon`, `.section-icon` | Decorative glyphs alongside visible text |
 | `.page-column` | Single reading column with the control gutter reserved; top-level blocks in its `main` are spaced apart |
-| `.masthead`, `.masthead-title`, `.site-nav` | Site title and primary navigation; mark the current page with `aria-current="page"` |
+| `.masthead`, `.masthead-title`, `.site-nav` | Site title and primary navigation; mark the current page with `aria-current="page"`; these links drop the resting underline because they sit apart from body text, and underline on hover |
 | `.article-header` | An article's `h1` and `.meta` line above its body |
 | `.post-list` | A list of posts built from `.entry-heading`, `.entry-title`, `.meta`, and an optional summary |
 | `.page-footer` | Small, ruled site footer |

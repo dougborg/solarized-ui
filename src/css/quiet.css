@@ -1,5 +1,6 @@
 /* Quiet patterns for dashboards and status pages: bordered panels with rows, status states,
-   callouts, and small section labels. They carry no decoration beyond a faint edge. */
+   callouts, and small section labels. Color appears only where a state or an accent calls for
+   it: marked rows and tinted callouts. */
 
 .visually-hidden {
   position: absolute;
@@ -196,6 +197,74 @@
   margin: 0;
 }
 
+/* Tinted callouts: the whole panel takes the state's tint, with a colored leading edge. The icon
+   sits on the plain panel inside a ring of the state color. */
+.callout--tinted {
+  --ink: var(--card-ink);
+  --ink-2: var(--card-ink);
+  --ink-3: var(--card-ink);
+  color: var(--card-ink);
+  background: var(--callout-tint);
+  border-inline-start: 4px solid var(--callout-color);
+}
+.callout--tinted .callout-icon {
+  background: var(--panel);
+  box-shadow: inset 0 0 0 2px var(--callout-color);
+}
+
+/* Marked rows: a panel row with data-state or data-accent takes that color's tint and a leading
+   edge. Text switches to card ink, which keeps 4.5:1 on every tint. A pill inside sits on the
+   plain panel with a ring, so it stays visible on the tint. */
+.panel-rows > li[data-state="ok"],
+.panel-rows tr[data-state="ok"] {
+  --row-color: var(--solarized-green);
+  --row-tint: var(--tint-green);
+}
+.panel-rows > li[data-state="warn"],
+.panel-rows tr[data-state="warn"] {
+  --row-color: var(--solarized-yellow);
+  --row-tint: var(--tint-yellow);
+}
+.panel-rows > li[data-state="down"],
+.panel-rows tr[data-state="down"] {
+  --row-color: var(--solarized-red);
+  --row-tint: var(--tint-red);
+}
+.panel-rows > li[data-state="info"],
+.panel-rows tr[data-state="info"] {
+  --row-color: var(--solarized-blue);
+  --row-tint: var(--tint-blue);
+}
+.panel-rows > li[data-accent],
+.panel-rows tr[data-accent] {
+  --row-color: var(--section-accent);
+  --row-tint: var(--section-tint);
+}
+.panel-rows > li:is([data-state], [data-accent]),
+.panel-rows tr:is([data-state], [data-accent]) {
+  --ink: var(--card-ink);
+  --ink-2: var(--card-ink);
+  --ink-3: var(--card-ink);
+  color: var(--card-ink);
+}
+.panel-rows > li:is([data-state], [data-accent]),
+.panel-rows tr:is([data-state], [data-accent]) > * {
+  background: var(--row-tint);
+}
+.panel-rows > li:is([data-state], [data-accent]),
+.panel-rows tr:is([data-state], [data-accent]) > :first-child {
+  box-shadow: inset 6px 0 0 var(--row-color);
+}
+/* Between two tinted rows, the divider is a gap of plain panel. */
+.panel-rows > li:is([data-state], [data-accent]) + li:is([data-state], [data-accent]),
+.panel-rows tr:is([data-state], [data-accent]) + tr:is([data-state], [data-accent]) > * {
+  border-top-color: var(--panel);
+}
+.panel-rows :is(li, tr):is([data-state], [data-accent]) .status--pill {
+  background: var(--panel);
+  box-shadow: inset 0 0 0 2px var(--status-color, var(--row-color));
+}
+
 /* Tables that become labelled rows on narrow screens. Stacking changes how some browsers expose
    the table, so give stacked tables explicit roles (see the README). */
 @media (max-width: 560px) {
@@ -238,6 +307,20 @@
   .table--stack th {
     flex: 1 1 100%;
   }
+  .panel-rows .table--stack tr:is([data-state], [data-accent]) {
+    background: var(--row-tint);
+    box-shadow: inset 6px 0 0 var(--row-color);
+  }
+  .panel-rows .table--stack tr:is([data-state], [data-accent]) > * {
+    background: none;
+    box-shadow: none;
+  }
+  .panel-rows
+    .table--stack
+    tr:is([data-state], [data-accent])
+    + tr:is([data-state], [data-accent]) {
+    border-top-color: var(--panel);
+  }
   .table--stack td[data-label]:not([data-label=""])::before {
     content: attr(data-label) " ";
     color: var(--ink-3);
@@ -259,9 +342,17 @@
     border-color: #93a1a1;
     background: none;
   }
-  .status--pill {
+  .status--pill,
+  .panel-rows :is(li, tr):is([data-state], [data-accent]) .status--pill {
     background: none;
+    box-shadow: none;
     border: 1px solid #93a1a1;
+  }
+  .callout--tinted,
+  .panel-rows > li:is([data-state], [data-accent]),
+  .panel-rows tr:is([data-state], [data-accent]) > * {
+    background: none;
+    box-shadow: none;
   }
 }
 @media (forced-colors: active) {
@@ -281,5 +372,13 @@
   }
   .status--pill {
     border: 1px solid CanvasText;
+  }
+  .callout--tinted {
+    border-inline-start-color: CanvasText;
+  }
+  .panel-rows > li:is([data-state], [data-accent]),
+  .panel-rows tr:is([data-state], [data-accent]) > :first-child,
+  .panel-rows .table--stack tr:is([data-state], [data-accent]) {
+    border-inline-start: 6px solid CanvasText;
   }
 }

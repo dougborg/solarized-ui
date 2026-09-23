@@ -386,7 +386,7 @@ for (const colorScheme of ["light", "dark"] as const) {
       await page.evaluate(() => document.fonts.ready);
       await expectReflow(page);
       expect(await axeViolations(page)).toEqual([]);
-      await expect(page.getByRole("status").first()).toContainText("All systems operational");
+      await expect(page.getByRole("status").first()).toContainText("Service disruption detected");
       for (const state of ["Operational", "Degraded", "Outage", "Online"]) {
         await expect(page.getByText(state, { exact: true }).first()).toBeVisible();
       }
@@ -408,11 +408,46 @@ test("a forced theme switches the quiet surfaces too", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "light" });
   await page.goto("/status.html");
   await page.evaluate(() => document.documentElement.setAttribute("data-theme", "dark"));
-  const panel = page.locator(".panel").first();
+  const panel = page.locator(".panel.panel-rows").first();
   await expect(panel).toHaveCSS("background-color", "rgb(7, 54, 66)");
   // Dark panels have no shadow, so their edge must differ from their surface.
   await expect(panel).toHaveCSS("border-top-color", "rgb(88, 110, 117)");
   expect(await axeViolations(page)).toEqual([]);
+});
+
+test("marked rows take their state's tint and edge, and pills keep a ring", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "light" });
+  await page.goto("/status.html");
+  const panel = page.locator(".panel.panel-rows").first();
+  const panelColor = await panel.evaluate((el) => getComputedStyle(el).backgroundColor);
+  const down = page.locator('tr[data-state="down"]');
+  const cell = down.locator("th");
+  const tint = await cell.evaluate((el) => getComputedStyle(el).backgroundColor);
+  expect(tint).not.toBe(panelColor);
+  // The leading edge is the exact Solarized red.
+  expect(await cell.evaluate((el) => getComputedStyle(el).boxShadow)).toContain("rgb(220, 50, 47)");
+  const pill = down.locator(".status--pill");
+  expect(await pill.evaluate((el) => getComputedStyle(el).backgroundColor)).toBe(panelColor);
+  expect(await pill.evaluate((el) => getComputedStyle(el).boxShadow)).toContain("rgb(220, 50, 47)");
+  const callout = page.locator(".callout--tinted");
+  expect(await callout.evaluate((el) => getComputedStyle(el).backgroundColor)).not.toBe(panelColor);
+  await expect(callout).toHaveCSS("border-left-color", "rgb(220, 50, 47)");
+
+  await page.setViewportSize({ width: 320, height: 900 });
+  // Stacked, the row itself carries the tint and edge.
+  expect(await down.evaluate((el) => getComputedStyle(el).boxShadow)).toContain("rgb(220, 50, 47)");
+  expect(await down.evaluate((el) => getComputedStyle(el).backgroundColor)).toBe(tint);
+});
+
+test("accent rows take their accent's tint and edge", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "light" });
+  await page.goto("/");
+  const row = page.locator('.panel-rows > li[data-accent="cyan"]');
+  expect(await row.evaluate((el) => getComputedStyle(el).boxShadow)).toContain("rgb(42, 161, 152)");
+  const panelColor = await row
+    .locator("xpath=..")
+    .evaluate((el) => getComputedStyle(el).backgroundColor);
+  expect(await row.evaluate((el) => getComputedStyle(el).backgroundColor)).not.toBe(panelColor);
 });
 
 test("the status table stacks into labelled rows on narrow screens", async ({ page }) => {
@@ -425,7 +460,9 @@ test("the status table stacks into labelled rows on narrow screens", async ({ pa
   expect(status && name && status.y).toBeGreaterThanOrEqual(
     (name?.y ?? 0) + (name?.height ?? 0) - 1,
   );
-  expect(latency?.y).toBeCloseTo(status?.y ?? 0, -1);
+  // Latency follows the status: beside it, or on the next line when a pill leaves no room.
+  expect(latency?.y ?? 0).toBeGreaterThanOrEqual((status?.y ?? 0) - 5);
+  expect(latency?.y ?? 0).toBeLessThan((status?.y ?? 0) + (status?.height ?? 0) * 2 + 8);
   expect(
     await row
       .locator("td")

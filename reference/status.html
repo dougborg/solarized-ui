@@ -12,17 +12,17 @@
 <body>
 <a class="skip-link" href="#main">Skip to main content</a>
 <div class="page-column">
-  <header class="masthead masthead--plain">
-    <p class="masthead-title"><a href="index.html">Example Name</a></p>
-    <p class="meta">Service status</p>
+  <header class="masthead masthead--band">
+    <p class="masthead-title masthead-title--identity"><a href="index.html">Example Name</a></p>
+    <nav class="site-nav" aria-label="Site"><ul><li><a href="index.html">Posts</a></li><li><a href="article.html">Article</a></li><li><a href="status.html" aria-current="page">Status</a></li></ul></nav>
   </header>
 
   <main id="main" tabindex="-1">
-    <div class="panel callout" data-state="ok" role="status">
-      <span class="callout-icon" aria-hidden="true">&#x2713;</span>
+    <div class="panel callout callout--tinted" data-state="down" role="status">
+      <span class="callout-icon" aria-hidden="true">!</span>
       <div>
-        <h1 class="callout-title">All systems operational</h1>
-        <p>Public services are responding and the home network is checking in.</p>
+        <h1 class="callout-title">Service disruption detected</h1>
+        <p>One service is down and another is degraded; the home network is checking in.</p>
       </div>
     </div>
 
@@ -34,24 +34,24 @@
             <tr role="row"><th scope="col" role="columnheader">Service</th><th scope="col" role="columnheader">Status</th><th scope="col" role="columnheader">Latency</th></tr>
           </thead>
           <tbody role="rowgroup">
-            <tr role="row">
+            <tr role="row" data-state="ok">
               <th scope="row" role="rowheader"><a class="panel-title" href="#main">Website</a><span class="panel-description">Main site at www.example.net</span></th>
-              <td role="cell" data-label=""><span class="status" data-state="ok">Operational</span></td>
+              <td role="cell" data-label=""><span class="status status--pill" data-state="ok">Operational</span></td>
               <td role="cell" class="numeric" data-label="Latency">5 ms</td>
             </tr>
-            <tr role="row">
+            <tr role="row" data-state="ok">
               <th scope="row" role="rowheader"><a class="panel-title" href="#main">Domain redirect</a><span class="panel-description">example.net forwards visitors to the main site</span></th>
-              <td role="cell" data-label=""><span class="status" data-state="ok">Operational</span></td>
+              <td role="cell" data-label=""><span class="status status--pill" data-state="ok">Operational</span></td>
               <td role="cell" class="numeric" data-label="Latency">8 ms</td>
             </tr>
-            <tr role="row">
+            <tr role="row" data-state="warn">
               <th scope="row" role="rowheader"><a class="panel-title" href="#main">Résumé</a><span class="panel-description">Public résumé at resume.example.org</span></th>
-              <td role="cell" data-label=""><span class="status" data-state="warn">Degraded</span></td>
+              <td role="cell" data-label=""><span class="status status--pill" data-state="warn">Degraded</span></td>
               <td role="cell" class="numeric" data-label="Latency">1,204 ms</td>
             </tr>
-            <tr role="row">
+            <tr role="row" data-state="down">
               <th scope="row" role="rowheader"><a class="panel-title" href="#main">Blog</a><span class="panel-description">Writing and projects at example.org</span></th>
-              <td role="cell" data-label=""><span class="status" data-state="down">Outage</span></td>
+              <td role="cell" data-label=""><span class="status status--pill" data-state="down">Outage</span></td>
               <td role="cell" class="numeric" data-label="Latency">&ndash;</td>
             </tr>
           </tbody>
@@ -62,7 +62,7 @@
     <section aria-labelledby="network-heading">
       <h2 class="section-label" id="network-heading">Home network</h2>
       <ul class="panel panel-rows">
-        <li>
+        <li data-state="ok">
           <div><span class="panel-title">Home network online</span><span class="panel-description">Last heartbeat 57 seconds ago.</span></div>
           <span class="status status--pill" data-state="ok">Online</span>
         </li>

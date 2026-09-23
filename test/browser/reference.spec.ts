@@ -464,6 +464,7 @@ const tableShapes: Record<string, string> = {
   "several bodies": hiddenHead + rows("a", "b") + rows("c", "d"),
   "an empty first body": `${hiddenHead}<tbody></tbody>${rows("a", "b")}<tbody></tbody>`,
   "a foot before the body": `${hiddenHead}<tfoot>${row("f")}</tfoot>${rows("a", "b")}`,
+  "a foot after the body": `${hiddenHead}${rows("a", "b")}<tfoot>${row("f")}</tfoot>`,
   "a single row": hiddenHead + rows("a"),
   "a nested table": `<tbody><tr data-state="down"><th>a</th><td><table>${rows("n", "m")}</table></td></tr></tbody>`,
 };
@@ -485,16 +486,24 @@ function misplacedCorners(panel: HTMLElement): string[] {
   });
 }
 
-/** Lists each of the panel table's rows that lacks a divider above it, or has one while on top. */
+/**
+ * Lists each visible row of the panel's table whose divider is wrong: every row below the first
+ * has one, and it is a gap of plain panel exactly when both rows it separates are tinted.
+ */
 function misplacedDividers(panel: HTMLElement): string[] {
   const stacked = getComputedStyle(panel.querySelector("tr") as Element).display === "flex";
-  const ordered = [...panel.querySelectorAll(":scope > table > :not(thead) > tr")].sort(
+  const groups = stacked ? ":not(thead)" : ":not(thead.visually-hidden)";
+  const ordered = [...panel.querySelectorAll(`:scope > table > ${groups} > tr`)].sort(
     (a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top,
   );
+  const plain = getComputedStyle(panel).backgroundColor;
   return ordered.flatMap((tr, index) => {
-    const edge = (stacked ? tr : tr.firstElementChild) as Element;
-    const divided = getComputedStyle(edge).borderTopWidth !== "0px";
-    return divided === index > 0 ? [] : [edge.textContent ?? ""];
+    const style = getComputedStyle((stacked ? tr : tr.firstElementChild) as Element);
+    const gap = tr.hasAttribute("data-state") && ordered[index - 1]?.hasAttribute("data-state");
+    const right =
+      (style.borderTopWidth !== "0px") === index > 0 &&
+      (index === 0 || (style.borderTopColor === plain) === gap);
+    return right ? [] : [tr.textContent ?? ""];
   });
 }
 
@@ -514,9 +523,7 @@ for (const [width, dir] of [
         el.innerHTML = `<table class="table--stack">${inner}</table>`;
       }, html);
       expect(await panel.evaluate(misplacedCorners), shape).toEqual([]);
-      if (!shape.includes("visible")) {
-        expect(await panel.evaluate(misplacedDividers), shape).toEqual([]);
-      }
+      expect(await panel.evaluate(misplacedDividers), shape).toEqual([]);
     }
   });
 }

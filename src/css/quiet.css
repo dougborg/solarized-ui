@@ -105,9 +105,16 @@
   vertical-align: middle;
   font-weight: inherit;
 }
+/* Groups join with a divider too: below a visible head, between bodies with rows, and above a foot
+   (which renders last). Only the panel's own table takes these. */
 .panel-rows tr + tr > *,
-.panel-rows :where(tbody:has(> tr) ~ tbody) > tr:first-child > *,
-.panel-rows :where(table:has(> tbody > tr) > tfoot) > tr:first-child > * {
+.panel-rows > :where(table) > :where(tbody:has(> tr) ~ tbody) > tr:first-child > *,
+.panel-rows > :where(table:has(> tbody > tr)) > :where(tfoot) > tr:first-child > *,
+.panel-rows
+  > :where(table)
+  > :where(thead:not(.visually-hidden) ~ tbody:has(> tr):not(tbody:has(> tr) ~ *))
+  > tr:first-child
+  > * {
   border-top: 1px solid var(--panel-divider);
 }
 .panel-rows td:last-child {
@@ -270,11 +277,18 @@
 .panel-rows tr:is([data-state], [data-accent]):dir(rtl) > :first-child {
   box-shadow: inset -4px 0 0 var(--row-color);
 }
-/* Between two tinted rows, the divider is a gap of plain panel, also across adjacent bodies. */
+/* Between two tinted rows, the divider is a gap of plain panel, also where a body meets the next
+   group. An empty body between two groups hides that meeting, so it keeps the plain divider. */
 .panel-rows > li:is([data-state], [data-accent]) + li:is([data-state], [data-accent]),
 .panel-rows tr:is([data-state], [data-accent]) + tr:is([data-state], [data-accent]) > *,
 .panel-rows
-  :where(tbody:has(> tr:last-child:is([data-state], [data-accent])) + tbody)
+  > table
+  > :where(tbody:has(> tr:last-child:is([data-state], [data-accent])) + :is(tbody, tfoot))
+  > tr:first-child:is([data-state], [data-accent])
+  > *,
+.panel-rows
+  > table:where(:has(> tbody:last-of-type > tr:last-child:is([data-state], [data-accent])))
+  > tfoot
   > tr:first-child:is([data-state], [data-accent])
   > * {
   border-top-color: var(--panel);
@@ -348,13 +362,7 @@
   .table--stack td {
     font-size: var(--text-small);
   }
-  .panel-rows .table--stack tr + tr > *,
-  .panel-rows
-    .table--stack
-    :where(:is(tbody, tfoot):has(> tr) ~ :is(tbody, tfoot))
-    > tr:first-child
-    > *,
-  .panel-rows .table--stack td:last-child {
+  .panel-rows .table--stack tr > :is(th, td) {
     border-top: 0;
     text-align: start;
   }
@@ -388,7 +396,9 @@
   .panel-rows .table--stack tr:is([data-state], [data-accent]) + tr:is([data-state], [data-accent]),
   .panel-rows
     .table--stack
-    :where(tbody:has(> tr:last-child:is([data-state], [data-accent])) + tbody)
+    :where(
+      :is(tbody, tfoot):has(> tr:last-child:is([data-state], [data-accent])) + :is(tbody, tfoot)
+    )
     > tr:first-child:is([data-state], [data-accent]) {
     border-top-color: var(--panel);
   }
@@ -456,8 +466,13 @@
   }
   .panel-rows > li + li,
   .panel-rows tr + tr > *,
-  .panel-rows :where(tbody:has(> tr) ~ tbody) > tr:first-child > *,
-  .panel-rows :where(table:has(> tbody > tr) > tfoot) > tr:first-child > *,
+  .panel-rows > :where(table) > :where(tbody:has(> tr) ~ tbody) > tr:first-child > *,
+  .panel-rows > :where(table:has(> tbody > tr)) > :where(tfoot) > tr:first-child > *,
+  .panel-rows
+    > :where(table)
+    > :where(thead:not(.visually-hidden) ~ tbody:has(> tr):not(tbody:has(> tr) ~ *))
+    > tr:first-child
+    > *,
   .table--stack tr + tr,
   .table--stack :where(:is(tbody, tfoot):has(> tr) ~ :is(tbody, tfoot)) > tr:first-child {
     border-color: CanvasText;

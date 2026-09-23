@@ -408,7 +408,10 @@ test("a forced theme switches the quiet surfaces too", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "light" });
   await page.goto("/status.html");
   await page.evaluate(() => document.documentElement.setAttribute("data-theme", "dark"));
-  await expect(page.locator(".panel").first()).toHaveCSS("background-color", "rgb(7, 54, 66)");
+  const panel = page.locator(".panel").first();
+  await expect(panel).toHaveCSS("background-color", "rgb(7, 54, 66)");
+  // Dark panels have no shadow, so their edge must differ from their surface.
+  await expect(panel).toHaveCSS("border-top-color", "rgb(88, 110, 117)");
   expect(await axeViolations(page)).toEqual([]);
 });
 

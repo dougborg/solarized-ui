@@ -100,7 +100,7 @@
     --card-ink: light-dark(var(--solarized-base02), var(--solarized-base1));
     --panel: light-dark(var(--solarized-base3), var(--solarized-base02));
     --panel-ink: light-dark(var(--solarized-base01), var(--solarized-base1));
-    --panel-border: light-dark(var(--solarized-base2), var(--solarized-base02));
+    --panel-border: light-dark(var(--solarized-base2), var(--solarized-base01));
     --panel-divider: light-dark(var(--solarized-base2), var(--solarized-base03));
   }
   :root:where([data-theme="light"]) {

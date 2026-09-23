@@ -102,10 +102,10 @@ Reserve `var(--control-gutter)` at the right and at least 60px at the bottom so 
 | `.panel-rows` | Put on a panel `ul`/`ol`, or on a panel wrapping a `table`: rows with dividers, title on the start side and a value or status on the end side |
 | `.status[data-state]` | `ok`, `warn`, `down`, or `info`: a round dot in green, yellow, red, or blue beside the label, which stays in ink |
 | `.status--pill` | A status on its tint, for standalone badges |
-| `.callout`, `.callout-icon`, `.callout-title` | An icon badge beside a headline and sentence, toned by `data-state`; combine with `.panel`, and add `role="status"` when it updates live |
+| `.callout`, `.callout-icon`, `.callout-title` | An icon badge beside a headline and sentence, toned by `data-state` (`ok`, `warn`, or `down`; without one it uses the blue accent, which also serves as info); combine with `.panel`, and add `role="status"` when it updates live |
 | `.section-label` | A small, muted, sans-serif heading for a group of panels, quieter than `.section-title` |
 | `.numeric` | Tabular figures that never wrap, for latencies, counts, and dates |
-| `.table--stack` | A table that becomes labelled rows below 560px, using each cell's `data-label`; give it explicit ARIA table roles, since stacking hides its table semantics in some browsers |
+| `.table--stack` | A table that becomes labelled rows below 560px, using each cell's `data-label`; give it explicit ARIA table roles, since stacking hides its table semantics in some browsers, as `reference/status.html` does |
 | `.masthead--plain` | A masthead without its rule |
 | `.visually-hidden` | Hidden visually but kept for assistive technology, such as a table's header row |
 | `.prose` | Long-form writing: headings, lists, quotes, wrapped code blocks, tables, figures, rules, and footnotes |

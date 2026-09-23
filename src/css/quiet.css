@@ -94,7 +94,8 @@
 .panel-rows table {
   width: 100%;
   margin: 0;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 .panel-rows th,
 .panel-rows td {
@@ -197,15 +198,22 @@
   margin: 0;
 }
 
-/* Tinted callouts: the whole panel takes the state's tint, with a colored leading edge. The icon
-   sits on the plain panel inside a ring of the state color. */
+/* Tinted callouts: the whole panel takes the state's tint, with a colored leading edge like a
+   marked row's. The icon sits on the plain panel inside a ring of the state color. */
 .callout--tinted {
   --ink: var(--card-ink);
   --ink-2: var(--card-ink);
   --ink-3: var(--card-ink);
   color: var(--card-ink);
   background: var(--callout-tint);
-  border-inline-start: 4px solid var(--callout-color);
+  box-shadow:
+    inset 4px 0 0 var(--callout-color),
+    var(--elevation);
+}
+.callout--tinted:dir(rtl) {
+  box-shadow:
+    inset -4px 0 0 var(--callout-color),
+    var(--elevation);
 }
 .callout--tinted .callout-icon {
   background: var(--panel);
@@ -214,7 +222,18 @@
 
 /* Marked rows: a panel row with data-state or data-accent takes that color's tint and a leading
    edge. Text switches to card ink, which keeps 4.5:1 on every tint. A pill inside sits on the
-   plain panel with a ring, so it stays visible on the tint. */
+   plain panel with a ring, so it stays visible on the tint. The outer rows round their leading
+   corners to the panel's inner radius, so an edge curves at the panel's corners as a callout's
+   does. */
+.panel-rows > li:first-child,
+.panel-rows table > :not(.visually-hidden):first-child > tr:first-child > :first-child,
+.panel-rows table > .visually-hidden:first-child + * > tr:first-child > :first-child {
+  border-start-start-radius: calc(var(--radius-lg) - 1px);
+}
+.panel-rows > li:last-child,
+.panel-rows table > :last-child > tr:last-child > :first-child {
+  border-end-start-radius: calc(var(--radius-lg) - 1px);
+}
 .panel-rows > li[data-state="ok"],
 .panel-rows tr[data-state="ok"] {
   --row-color: var(--solarized-green);
@@ -253,12 +272,12 @@
 }
 .panel-rows > li:is([data-state], [data-accent]),
 .panel-rows tr:is([data-state], [data-accent]) > :first-child {
-  box-shadow: inset 6px 0 0 var(--row-color);
+  box-shadow: inset 4px 0 0 var(--row-color);
 }
 /* Box shadows have no logical offsets, so the edge moves to the right in right-to-left text. */
 .panel-rows > li:is([data-state], [data-accent]):dir(rtl),
 .panel-rows tr:is([data-state], [data-accent]):dir(rtl) > :first-child {
-  box-shadow: inset -6px 0 0 var(--row-color);
+  box-shadow: inset -4px 0 0 var(--row-color);
 }
 /* Between two tinted rows, the divider is a gap of plain panel. */
 .panel-rows > li:is([data-state], [data-accent]) + li:is([data-state], [data-accent]),
@@ -312,12 +331,19 @@
   .table--stack th {
     flex: 1 1 100%;
   }
+  .panel-rows .table--stack > thead:first-child + * > tr:first-child,
+  .panel-rows .table--stack > :not(thead):first-child > tr:first-child {
+    border-start-start-radius: calc(var(--radius-lg) - 1px);
+  }
+  .panel-rows .table--stack > :last-child > tr:last-child {
+    border-end-start-radius: calc(var(--radius-lg) - 1px);
+  }
   .panel-rows .table--stack tr:is([data-state], [data-accent]) {
     background: var(--row-tint);
-    box-shadow: inset 6px 0 0 var(--row-color);
+    box-shadow: inset 4px 0 0 var(--row-color);
   }
   .panel-rows .table--stack tr:is([data-state], [data-accent]):dir(rtl) {
-    box-shadow: inset -6px 0 0 var(--row-color);
+    box-shadow: inset -4px 0 0 var(--row-color);
   }
   .panel-rows .table--stack tr:is([data-state], [data-accent]) > * {
     background: none;
@@ -381,12 +407,10 @@
   .status--pill {
     border: 1px solid CanvasText;
   }
-  .callout--tinted {
-    border-inline-start-color: CanvasText;
-  }
+  .callout--tinted,
   .panel-rows > li:is([data-state], [data-accent]),
   .panel-rows tr:is([data-state], [data-accent]) > :first-child,
   .panel-rows .table--stack tr:is([data-state], [data-accent]) {
-    border-inline-start: 6px solid CanvasText;
+    border-inline-start: 4px solid CanvasText;
   }
 }

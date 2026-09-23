@@ -431,23 +431,32 @@ test("marked rows take their state's tint and edge, and pills keep a ring", asyn
   expect(await pill.evaluate((el) => getComputedStyle(el).boxShadow)).toContain("rgb(220, 50, 47)");
   const callout = page.locator(".callout--tinted");
   expect(await callout.evaluate((el) => getComputedStyle(el).backgroundColor)).not.toBe(panelColor);
-  await expect(callout).toHaveCSS("border-left-color", "rgb(220, 50, 47)");
+  expect(await callout.evaluate((el) => getComputedStyle(el).boxShadow)).toMatch(
+    /rgb\(220, 50, 47\) 4px 0px 0px 0px inset/,
+  );
+
+  // The outer rows round their leading corners so the edge curves with the panel, as a callout's does.
+  const rows = page.locator(".panel-rows tbody tr");
+  await expect(rows.first().locator("th")).toHaveCSS("border-top-left-radius", "11px");
+  await expect(rows.last().locator("th")).toHaveCSS("border-bottom-left-radius", "11px");
+  await expect(rows.nth(1).locator("th")).toHaveCSS("border-top-left-radius", "0px");
 
   await page.setViewportSize({ width: 320, height: 900 });
   // Stacked, the row itself carries the tint and edge.
   expect(await down.evaluate((el) => getComputedStyle(el).boxShadow)).toContain("rgb(220, 50, 47)");
   expect(await down.evaluate((el) => getComputedStyle(el).backgroundColor)).toBe(tint);
+  await expect(down).toHaveCSS("border-bottom-left-radius", "11px");
 });
 
 test("a marked row's edge follows the text direction", async ({ page }) => {
   await page.goto("/status.html");
   const cell = page.locator('tr[data-state="down"] th');
   expect(await cell.evaluate((el) => getComputedStyle(el).boxShadow)).toMatch(
-    / 6px 0px 0px 0px inset/,
+    / 4px 0px 0px 0px inset/,
   );
   await page.evaluate(() => document.documentElement.setAttribute("dir", "rtl"));
   expect(await cell.evaluate((el) => getComputedStyle(el).boxShadow)).toMatch(
-    / -6px 0px 0px 0px inset/,
+    / -4px 0px 0px 0px inset/,
   );
 });
 

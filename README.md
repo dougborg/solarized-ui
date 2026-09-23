@@ -100,9 +100,11 @@ Reserve `var(--control-gutter)` at the right and at least 60px at the bottom so 
 | `.read-progress` | A CSS-only reading bar fixed to the top; hidden without scroll timelines, under reduced motion, and in print |
 | `.panel`, `.panel-title`, `.panel-description` | A bordered, softly raised group with a title and a muted line |
 | `.panel-rows` | Put on a panel `ul`/`ol`, or on a panel wrapping a `table`: rows with dividers, title on the start side and a value or status on the end side |
+| `li` or `tr` with `data-state` or `data-accent` inside `.panel-rows` | A marked row: the state's or accent's tint, a 6px leading edge, and card ink for text; a `.status--pill` inside sits on the plain panel with a ring of its color |
 | `.status[data-state]` | `ok`, `warn`, `down`, or `info`: a round dot in green, yellow, red, or blue beside the label, which stays in ink |
 | `.status--pill` | A status on its tint, for standalone badges |
 | `.callout`, `.callout-icon`, `.callout-title` | An icon badge beside a headline and sentence, toned by `data-state` (`ok`, `warn`, or `down`; without one it uses the blue accent, which also serves as info); combine with `.panel`, and add `role="status"` when it updates live |
+| `.callout--tinted` | The callout fills with its state's tint and takes a colored leading edge; the icon gets a ring |
 | `.section-label` | A small, muted, sans-serif heading for a group of panels, quieter than `.section-title` |
 | `.numeric` | Tabular figures that never wrap, for latencies, counts, and dates |
 | `.table--stack` | A table that becomes labelled rows below 560px, using each cell's `data-label`; give it explicit ARIA table roles, since stacking hides its table semantics in some browsers, as `reference/status.html` does |

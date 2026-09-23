@@ -164,7 +164,7 @@
 
   <section id="quiet" class="content-section" data-accent="green">
     <h2 class="section-title"><span class="nerd-icon section-icon" aria-hidden="true">&#xf233;</span>Quiet patterns</h2>
-    <p>For dashboards and status pages: panels with a faint edge and a soft shadow in light themes, rows with dividers, and states that always name themselves. The <a href="status.html">example status page</a> uses nothing else.</p>
+    <p>For dashboards and status pages: panels with a faint edge and a soft shadow in light themes, rows with dividers, and states that always name themselves. Mark a row with <code>data-state</code> or <code>data-accent</code> to give it that color's tint and a leading edge. The <a href="status.html">example status page</a> uses nothing else.</p>
     <div class="stack">
       <div class="panel callout" data-state="warn">
         <span class="callout-icon" aria-hidden="true">!</span>
@@ -179,6 +179,30 @@
           <li><div><span class="panel-title">Nightly import</span><span class="panel-description">The last run did not finish</span></div><span class="status" data-state="down">Failed</span></li>
           <li><div><span class="panel-title">Search index</span><span class="panel-description">Rebuilt <span class="numeric">12,480</span> documents</span></div><span class="status" data-state="info">Rebuilding</span></li>
         </ul>
+      </div>
+
+      <div class="panel callout callout--tinted" data-state="down">
+        <span class="callout-icon" aria-hidden="true">!</span>
+        <div><p class="callout-title">A tinted callout</p><p>Add <code>.callout--tinted</code> when the state should fill the panel.</p></div>
+      </div>
+
+      <div>
+        <h3 class="section-label">Marked rows by state</h3>
+        <ul class="panel panel-rows">
+          <li data-state="ok"><div><span class="panel-title">Build runner</span><span class="panel-description">Available for the next job</span></div><span class="status status--pill" data-state="ok">Idle</span></li>
+          <li data-state="warn"><div><span class="panel-title">Backup service</span><span class="panel-description">Scheduled work is in progress</span></div><span class="status status--pill" data-state="warn">Paused</span></li>
+          <li data-state="down"><div><span class="panel-title">Nightly import</span><span class="panel-description">The last run did not finish</span></div><span class="status status--pill" data-state="down">Failed</span></li>
+          <li data-state="info"><div><span class="panel-title">Search index</span><span class="panel-description">Rebuilt <span class="numeric">12,480</span> documents</span></div><span class="status status--pill" data-state="info">Rebuilding</span></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="section-label">Marked rows by accent</h3>
+        <ol class="panel panel-rows">
+          <li data-accent="yellow"><div><a class="panel-title" href="article.html">A post about the house</a><span class="panel-description">Each row takes its accent's tint and edge.</span></div><p class="meta numeric">Sep 18, 2026</p></li>
+          <li data-accent="cyan"><div><a class="panel-title" href="article.html">A post about the network</a><span class="panel-description">Text switches to card ink on every tint.</span></div><p class="meta numeric">Aug 14, 2026</p></li>
+          <li data-accent="blue"><div><a class="panel-title" href="article.html">A post about the edge</a><span class="panel-description">Colour never carries meaning on its own.</span></div><p class="meta numeric">Nov 2, 2025</p></li>
+        </ol>
       </div>
 
       <div class="panel">

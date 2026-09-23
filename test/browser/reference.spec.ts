@@ -498,10 +498,16 @@ function misplacedDividers(panel: HTMLElement): string[] {
   });
 }
 
-for (const width of [1440, 320]) {
-  test(`only rows touching the panel's corners curve, at ${width}px`, async ({ page }) => {
+for (const [width, dir] of [
+  [1440, "ltr"],
+  [320, "ltr"],
+  [1440, "rtl"],
+  [320, "rtl"],
+] as const) {
+  test(`only rows touching the panel's corners curve, at ${width}px ${dir}`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/status.html");
+    await page.evaluate((d) => document.documentElement.setAttribute("dir", d), dir);
     const panel = page.locator(".panel.panel-rows").first();
     for (const [shape, html] of Object.entries(tableShapes)) {
       await panel.evaluate((el, inner) => {
@@ -576,6 +582,10 @@ test("quiet patterns keep their edges in forced colors and drop shadows in print
       .first()
       .evaluate((el) => getComputedStyle(el, "::before").backgroundColor),
   ).not.toMatch(/rgba\(0, 0, 0, 0\)/);
+  // Wide, the first cell carries the edge and the row does not, so there is only one.
+  const marked = page.locator('tr[data-state="down"]');
+  await expect(marked).toHaveCSS("border-left-width", "0px");
+  await expect(marked.locator("th")).toHaveCSS("border-left-width", "4px");
   expect(await axeViolations(page)).toEqual([]);
   await page.emulateMedia({ forcedColors: "none", media: "print" });
   await expect(panel).toHaveCSS("box-shadow", "none");

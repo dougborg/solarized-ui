@@ -436,15 +436,18 @@
     border-inline-start: 4px solid var(--row-color);
   }
 }
-/* Stacked, the row carries the edge, so its first cell drops the one it would get below. */
-@media print and (max-width: 560px) {
+/* Stacked, the row carries the edge, so its first cell drops the one it would get when wide. */
+@media print and (max-width: 560px), (forced-colors: active) and (max-width: 560px) {
   .panel-rows .table--stack tr:is([data-state], [data-accent]) {
     border-inline-start: 4px solid var(--row-color);
   }
-}
-@media print and (max-width: 560px), (forced-colors: active) and (max-width: 560px) {
   .panel-rows .table--stack tr:is([data-state], [data-accent]) > :first-child {
     border-inline-start: 0;
+  }
+}
+@media (forced-colors: active) and (max-width: 560px) {
+  .panel-rows .table--stack tr:is([data-state], [data-accent]) {
+    border-inline-start-color: CanvasText;
   }
 }
 @media (forced-colors: active) {
@@ -470,8 +473,7 @@
   }
   .callout--tinted,
   .panel-rows > li:is([data-state], [data-accent]),
-  .panel-rows tr:is([data-state], [data-accent]) > :first-child,
-  .panel-rows .table--stack tr:is([data-state], [data-accent]) {
+  .panel-rows tr:is([data-state], [data-accent]) > :first-child {
     border-inline-start: 4px solid CanvasText;
   }
 }

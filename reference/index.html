@@ -13,8 +13,8 @@
   .specimen > section, .specimen > footer { margin-top: var(--space-12); }
   .eyebrow { font-family: var(--mono); font-size: var(--text-small); color: var(--ink); margin-bottom: var(--space-3); }
   .specimen h1 { max-width: 24ch; font-size: clamp(1.75rem, 4vw, 2.75rem); margin-bottom: var(--space-4); }
-  .specimen nav { margin-top: var(--space-6); }
-  .specimen nav a { min-height: 44px; display: inline-flex; align-items: center; }
+  .specimen > header nav { margin-top: var(--space-6); }
+  .specimen > header nav a { min-height: 44px; display: inline-flex; align-items: center; }
   .swatches { grid-template-columns: repeat(4, minmax(0, 1fr)); list-style: none; padding: 0; }
   .swatch { border-top: 8px solid var(--section-accent); }
   .swatch strong { color: var(--ink); }
@@ -29,7 +29,7 @@
     .swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
     .examples { grid-template-columns: minmax(0, 1fr); }
   }
-  @media print { .specimen { padding: 0; } .specimen nav { display: none; } }
+  @media print { .specimen { padding: 0; } .specimen > header nav { display: none; } }
 </style>
 </head>
 <body>
@@ -40,7 +40,7 @@
     <h1>Calm surfaces.<br>Clear hierarchy.</h1>
     <p class="lead">A Solarized foundation for personal sites and internal tools. Readable prose, a little terminal character, and color that helps you find your place.</p>
     <nav class="cluster" aria-label="Design system sections">
-      <a href="#palette">Palette</a><a href="#type">Typography</a><a href="#content">Content</a><a href="#services">Services</a><a href="#reuse">Reuse</a><a href="article.html">Example article</a>
+      <a href="#palette">Palette</a><a href="#type">Typography</a><a href="#content">Content</a><a href="#services">Services</a><a href="#patterns">Site patterns</a><a href="#reuse">Reuse</a><a href="article.html">Example article</a>
     </nav>
   </header>
 
@@ -107,6 +107,58 @@
         <p>Scheduled work is in progress.</p>
         <p class="status" data-accent="red">Failure example: last backup did not finish.</p>
       </article>
+    </div>
+  </section>
+
+  <section id="patterns" class="content-section" data-accent="blue">
+    <h2 class="section-title"><span class="nerd-icon section-icon" aria-hidden="true">&#xf0c1;</span>Site patterns</h2>
+    <p>Shared pieces for personal sites. Each takes its color from the nearest <code>data-accent</code> and still reads correctly without color.</p>
+    <div class="stack">
+      <div class="surface">
+        <h3 class="entry-title">Identity and band</h3>
+        <header class="masthead masthead--band">
+          <p class="masthead-title masthead-title--identity"><a href="#patterns">Your Name</a></p>
+          <nav class="site-nav" aria-label="Example"><ul><li><a href="#patterns" aria-current="page">Posts</a></li><li><a href="#reuse">About</a></li></ul></nav>
+        </header>
+        <p>The band's six hard stops follow the résumé's accent order. Use <code>.accent-band</code> as a standalone rule:</p>
+        <hr class="accent-band">
+      </div>
+
+      <div class="surface">
+        <h3 class="entry-title">Timeline</h3>
+        <ol class="timeline-list">
+          <li data-accent="blue"><h4 class="entry-title">Newest entry</h4><p class="meta meta-row"><time datetime="2026-09-22">Sep 22, 2026</time><span>4 min read</span></p><p>Each item owns the rail below its marker.</p></li>
+          <li data-accent="cyan"><h4 class="entry-title">Older entry</h4><p class="meta meta-row"><time datetime="2026-09-11">Sep 11, 2026</time><span>2 min read</span></p><p>Dates stay in text; the color only helps you keep your place.</p></li>
+        </ol>
+        <ol class="timeline-list timeline-list--marked" style="margin-top: var(--space-8)">
+          <li data-accent="orange"><span class="timeline-marker" aria-hidden="true">EO</span><h4 class="entry-title">Example organization</h4><p class="meta">2024–Present</p><p>Larger markers hold initials or a logo.</p></li>
+          <li data-accent="green"><span class="timeline-marker" aria-hidden="true">AC</span><h4 class="entry-title">Another company</h4><p class="meta">2019–2024</p><p>The marker is decorative; the heading names the item.</p></li>
+        </ol>
+      </div>
+
+      <div class="surface">
+        <h3 class="entry-title">Cards and tints</h3>
+        <ul class="card-grid">
+          <li class="card" data-accent="violet"><h4 class="entry-title"><a href="#reuse">harness-kit</a></h4><p>Agent harness tooling.</p></li>
+          <li class="card" data-accent="cyan"><h4 class="entry-title"><a href="#reuse">gdub</a></h4><p>A Gradle wrapper wrapper.</p></li>
+          <li class="card" data-accent="yellow"><h4 class="entry-title"><a href="#reuse">solarized-ui</a></h4><p>This design system.</p></li>
+        </ul>
+        <p>Tints come from each accent's own hue with lighter or darker lightness, so they never add a new color. Any surface can take one:</p>
+        <div class="surface" data-accent="magenta" data-tint><p>A <code>.surface[data-tint]</code> in magenta.</p></div>
+      </div>
+
+      <div class="surface">
+        <h3 class="entry-title">Chips and pager</h3>
+        <ul class="chip-list" aria-label="Example topics">
+          <li class="chip"><span class="nerd-icon" aria-hidden="true">&#xf121;</span>TypeScript</li>
+          <li class="chip">Home infrastructure</li>
+          <li class="chip">Pulumi</li>
+        </ul>
+        <nav class="pager" aria-label="More examples" style="margin-top: var(--space-6)">
+          <a rel="prev" href="#palette"><span class="meta">Older</span>Color and surfaces</a>
+          <a rel="next" href="article.html"><span class="meta">Newer</span>Example article</a>
+        </nav>
+      </div>
     </div>
   </section>
 

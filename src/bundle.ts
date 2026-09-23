@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { stripTypeScriptTypes } from "node:module";
 
 /** Stylesheet sources, concatenated in cascade order. */
-const stylesheets = ["fonts", "tokens", "base", "components", "site", "prose"] as const;
+const stylesheets = ["fonts", "tokens", "base", "components", "site", "patterns", "prose"] as const;
 
 const fontsource = {
   "ibm-plex-sans": ["400-normal", "500-normal", "600-normal", "700-normal", "400-italic"],

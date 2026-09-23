@@ -11,9 +11,10 @@
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to main content</a>
+<div class="read-progress" aria-hidden="true"></div>
 <div class="page-column">
-  <header class="masthead">
-    <p class="masthead-title"><a href="index.html">solarized-ui</a></p>
+  <header class="masthead masthead--band">
+    <p class="masthead-title masthead-title--identity"><a href="index.html">solarized-ui</a></p>
     <nav class="site-nav" aria-label="Site">
       <ul>
         <li><a href="index.html">Components</a></li>
@@ -27,7 +28,7 @@
     <article>
       <header class="article-header">
         <h1>A calm place to write</h1>
-        <p class="meta"><time datetime="2026-09-22">Sep 22, 2026</time> · Example article</p>
+        <p class="meta meta-row"><time datetime="2026-09-22">Sep 22, 2026</time><span>Example article</span></p>
       </header>
       <div class="prose">
         <p class="lead">This page shows the site scaffolding and long-form prose components together: a reading column, a masthead with navigation, an article, a list of posts, and a footer.</p>
@@ -82,6 +83,10 @@
         </div>
       </div>
     </article>
+
+    <nav class="pager" aria-label="More articles">
+      <a rel="prev" href="index.html#palette"><span class="meta">Older</span>Choosing colors that stay put</a>
+    </nav>
 
     <section class="content-section" data-accent="blue" aria-labelledby="more">
       <h2 class="section-title" id="more">More posts</h2>

@@ -70,10 +70,13 @@ Reserve `var(--control-gutter)` at the right and at least 60px at the bottom so 
 | `--accent`, `--accent-ink`, `--rule` | Controls, hover/focus, and separators |
 | `--solarized-*` | The exact 16 official Solarized sRGB values |
 | `--tone-{blue,cyan,green,yellow,orange,red,magenta,violet}` | Unmodified accent aliases, identical in light and dark |
+| `--tint-{accent}`, `--section-tint` | Quiet surfaces derived from each accent's hue; `data-accent` sets `--section-tint`, which only `.surface[data-tint]` and `.card` paint |
+| `--accent-band` | Six-accent hard-stop gradient (blue, cyan, green, yellow, orange, magenta) |
 | `--sans`, `--mono`, `--text-*`, `--leading`, `--measure` | Mixed typography and 68ch reading measure |
 | `--space-*`, `--radius` | Shared spacing scale and 4px corners |
 | `.content-section`, `.section-title`, `data-accent` | Accent scope and lowercase section heading |
 | `.surface`, `--card-padding` | Borderless grouped content with optional padding override |
+| `.surface[data-tint]` | A surface tinted from its `data-accent` |
 | `.entry-heading`, `.entry-title`, `.meta` | Wrapping title/metadata row |
 | `.text-list`, `.supporting-details` | Accomplishments and one nested detail level |
 | `.facts` | Semantic `dl` category/value pairs |
@@ -85,6 +88,14 @@ Reserve `var(--control-gutter)` at the right and at least 60px at the bottom so 
 | `.article-header` | An article's `h1` and `.meta` line above its body |
 | `.post-list` | A list of posts built from `.entry-heading`, `.entry-title`, `.meta`, and an optional summary |
 | `.page-footer` | Small, ruled site footer |
+| `.masthead--band`, `.masthead-title--identity` | A masthead ruled by the accent band, and a bold blue identity name |
+| `.accent-band` | The accent band as a standalone 4px rule, such as an `hr` |
+| `.meta-row` | Inline metadata items separated by space, not punctuation |
+| `.timeline-list`, `.timeline-list--marked`, `.timeline-marker` | An ordered list with a rail and a marker per item in its `data-accent`; the marked variant holds initials or a logo |
+| `.card-grid`, `.card` | Tinted cards with an accent edge in a grid that reflows to one column; `--card-min` sets the column width |
+| `.chip-list`, `.chip` | Static tags, optionally with a leading `.nerd-icon` |
+| `.pager` | Older and newer links (`rel="prev"`, `rel="next"`) at the end of a page |
+| `.read-progress` | A CSS-only reading bar fixed to the top; hidden without scroll timelines, under reduced motion, and in print |
 | `.prose` | Long-form writing: headings, lists, quotes, wrapped code blocks, tables, figures, rules, and footnotes |
 | `.token.*` | Prism syntax tokens, highlighted by weight and style only, never by color |
 
@@ -93,11 +104,12 @@ Body text is 1rem with 1.55 leading; small/section/title sizes are 0.875/1.1875/
 Use sans-serif for prose, titles within entries, and data; monospace for section labels, code, and controls.
 Preserve proper nouns.
 Use a visible label for each status: color alone must never mean success, maintenance, or failure.
-Use the [official Solarized values](https://ethanschoonover.com/solarized/#the-values) without mixing, opacity, lightening, or darkening.
+Use the [official Solarized values](https://ethanschoonover.com/solarized/#the-values) for every color token, without mixing or opacity.
+The one exception is the tints: each `--tint-*` keeps its accent's own hue and changes only lightness and chroma (`oklch(from var(--solarized-*) L C h)`), so it adds no new color; browsers without relative color fall back to the neutral raised surface.
 Accents belong on decorative glyphs, rules, swatches, and markers.
 Small text and links use Solarized neutrals; underlines identify links.
 Status text has a colored marker, so the exact red does not have to meet text contrast on a dark surface.
-Cards use the exact secondary background.
+Plain surfaces use the exact secondary background; tinted cards keep the card text color, which meets AA on every tint in both themes.
 Stable hue tokens retain their values across themes.
 
 Use native headings, lists, links, and buttons.
@@ -111,6 +123,7 @@ This is not a complete form, navigation, or application-widget library.
 See the [example article](https://dougborg.org/solarized-ui/article.html) for the site and prose components together.
 For code highlighting, use a highlighter that emits Prism token classes, such as Astro's `syntaxHighlight: "prism"`; highlighters that write inline colors bypass the contrast rules above.
 Class names are global and unprefixed, so check them against any other stylesheet an application loads.
+The timeline is `.timeline-list`, not `.timeline`, because the résumé already uses that name.
 
 ## Versioning
 

@@ -288,6 +288,83 @@ test("article supports keyboard navigation and forced colors", async ({ page }) 
   await page.keyboard.press("Enter");
   await expect(page.getByRole("main")).toBeFocused();
   await page.emulateMedia({ forcedColors: "active" });
-  await expect(page.locator(".masthead")).not.toHaveCSS("border-bottom-style", "none");
+  // The banded masthead draws its rule with ::after, which forced colors turn to CanvasText.
+  expect(
+    await page
+      .locator(".masthead")
+      .evaluate((el) => getComputedStyle(el, "::after").backgroundColor),
+  ).not.toMatch(/rgba\(0, 0, 0, 0\)|transparent/);
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+});
+
+for (const colorScheme of ["light", "dark"] as const) {
+  test(`site patterns take their accents and tints in ${colorScheme}`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme });
+    await page.setViewportSize({ width: 320, height: 900 });
+    await page.goto("/#patterns");
+    await expectReflow(page);
+    const patterns = page.locator("#patterns");
+    expect(
+      await patterns.locator(".accent-band").evaluate((el) => getComputedStyle(el).backgroundImage),
+    ).toContain("linear-gradient");
+    const rail = await patterns
+      .locator(".timeline-list > li[data-accent='cyan']")
+      .evaluate((el) => getComputedStyle(el, "::before").backgroundColor);
+    expect(rail).toBe("rgb(42, 161, 152)");
+
+    // Tints differ by accent, and none is the neutral surface when relative color is supported.
+    const backgrounds = await patterns
+      .locator(".card")
+      .evaluateAll((cards) => cards.map((card) => getComputedStyle(card).backgroundColor));
+    expect(new Set(backgrounds).size).toBe(3);
+    const neutral = await page
+      .locator(".swatch")
+      .first()
+      .evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(backgrounds).not.toContain(neutral);
+
+    // Markers never overlap the text beside them.
+    for (const item of await patterns.locator(".timeline-list > li").all()) {
+      const heading = await item.locator(".entry-title").boundingBox();
+      const marker = await item.evaluate((li) => {
+        const custom = li.querySelector(".timeline-marker");
+        if (custom) return custom.getBoundingClientRect().right;
+        const rect = li.getBoundingClientRect();
+        return rect.left + Number.parseFloat(getComputedStyle(li, "::after").width);
+      });
+      expect(marker).toBeLessThanOrEqual(heading?.x ?? 0);
+    }
+    expect((await new AxeBuilder({ page }).include("#patterns").analyze()).violations).toEqual([]);
+  });
+}
+
+test("the reading bar fills with scrolling and stays out of print and reduced motion", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1024, height: 600 });
+  await page.goto("/article.html");
+  const bar = page.locator(".read-progress");
+  const width = () => bar.evaluate((el) => el.getBoundingClientRect().width);
+  expect(await width()).toBe(0);
+  await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
+  await expect.poll(width).toBeGreaterThan(1000);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(bar).toBeHidden();
+  await page.emulateMedia({ reducedMotion: "no-preference", media: "print" });
+  await expect(bar).toBeHidden();
+  await expect(page.locator(".pager")).toBeHidden();
+});
+
+test("site patterns stay visible in forced colors", async ({ page }) => {
+  await page.goto("/#patterns");
+  await page.emulateMedia({ forcedColors: "active" });
+  const card = page.locator("#patterns .card").first();
+  await expect(card).not.toHaveCSS("outline-style", "none");
+  expect(
+    await page
+      .locator("#patterns .timeline-list > li")
+      .first()
+      .evaluate((el) => getComputedStyle(el, "::before").backgroundColor),
+  ).not.toMatch(/rgba\(0, 0, 0, 0\)/);
+  expect((await new AxeBuilder({ page }).include("#patterns").analyze()).violations).toEqual([]);
 });

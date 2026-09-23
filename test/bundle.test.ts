@@ -72,6 +72,18 @@ test("the stylesheet uses only the exact Solarized values", () => {
   for (const value of hex) assert.ok(official.has(value), value);
 });
 
+test("derived tints come only from the exact accents' hues", () => {
+  const derived = [...css.matchAll(/oklch\(from (\S+) (\S+) (\S+) (\S+)\)/g)]
+    // The @supports feature test uses a placeholder color, not one that renders.
+    .filter(([, source]) => source !== "red");
+  assert.ok(derived.length >= 16, "a light and a dark tint for each accent");
+  for (const [expression, source, , , hue] of derived) {
+    assert.match(source, /^var\(--solarized-[a-z]+\)$/, expression);
+    assert.equal(hue, "h", `${expression} keeps its source hue`);
+  }
+  assert.doesNotMatch(css, /\b(rgba?|hsla?|hwb|lab|lch|color-mix)\(/);
+});
+
 test("the reference site serves the package under assets/", async () => {
   const site = await siteFiles();
   for (const [path, bytes] of files) assert.deepEqual(site.get(`assets/${path}`), bytes);

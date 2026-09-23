@@ -1,7 +1,8 @@
 [global]
 flavor = "gfm"
 include = ["*.md", "fonts/**/*.md", ".github/**/*.md"]
-exclude = ["node_modules", "dist", "site", ".claude"]
+# release-please generates CHANGELOG.md.
+exclude = ["node_modules", "dist", "site", ".claude", "CHANGELOG.md"]
 cache = false
 
 [MD013]

@@ -181,6 +181,8 @@ The Nerd Font is a subset; see [font provenance](fonts/README.md) before using a
 
 Merges to `main` use Conventional Commit titles.
 The [release-please](https://github.com/googleapis/release-please) workflow keeps a release PR with the next version and changelog; merging it tags the release.
+It opens that PR with an installation token from the `dougborg-release-please` GitHub App (ID 4392719), so the required checks run on it.
+The App must be installed on this repository, with the repository variable `RELEASE_PLEASE_APP_ID` set to `4392719` and the secret `RELEASE_PLEASE_APP_PRIVATE_KEY` holding its private key; without them the release job fails instead of opening a release PR.
 The publish job then builds, checks, and stages the version on npm with [trusted publishing](https://docs.npmjs.com/trusted-publishers) and provenance, so the repository stores no npm token.
 The trusted publisher may only stage, so a maintainer approves each version with two-factor authentication before it goes live, using `npm stage list` and `npm stage approve <stage-id>` or the Staged Packages tab on npmjs.com.
 See [staged publishing](https://docs.npmjs.com/staged-publishing/).

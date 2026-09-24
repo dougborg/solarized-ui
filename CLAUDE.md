@@ -32,5 +32,8 @@ Run `actionlint` after editing workflows.
 
 ## Consumers
 
-[resume.dougborg.org](https://github.com/dougborg/resume) is the first consumer, and it checks that its built files match byte for byte.
-A change here reaches it only through a version bump, so inspect the résumé in both themes when updating it.
+Each consumer pins an exact release, so a change here reaches it only through a version bump; inspect every consumer in both themes when updating it.
+
+- [resume.dougborg.org](https://github.com/dougborg/resume) pins the package and checks that its built files match byte for byte.
+- [dougborg.org](https://github.com/dougborg/dougborg.github.io), the blog, pins the package in its Astro build.
+- [dougborg.net](https://github.com/dougborg/dougborg-dot-net) (`services/dougborg-net-home`) and its status page (`services/status`) embed a copy of the release, and each copy is updated with that service's `scripts/sync-design-system.sh`.

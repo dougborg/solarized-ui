@@ -47,6 +47,16 @@
 .theme-toggle .nerd-icon {
   display: inline-block;
   font-size: 22px;
+  /* The bundled glyphs paint wider than their 0.6em advance. Size each box to
+     its ink so button centering and the rotation pivot follow the visible shape. */
+  width: 1.038em;
+  text-align: left;
+}
+[data-theme="light"] .theme-toggle .nerd-icon {
+  width: 0.925em;
+}
+[data-theme="dark"] .theme-toggle .nerd-icon {
+  width: 0.693em;
 }
 .section-icon {
   display: inline-block;

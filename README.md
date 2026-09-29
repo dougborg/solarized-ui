@@ -137,6 +137,14 @@ The Nerd Font is a subset, so verify new glyphs before using them.
 Keep focus visible and controls at least 44px.
 This is not a complete form, navigation, or application-widget library.
 
+### Icon alignment
+
+Center icons by their painted bounds, not their text advance or an SVG's unexamined view box.
+The bundled Nerd Font symbols can paint beyond their monospace advance, so flex/grid centering alone does not center the visible shape.
+For new icon controls, prefer SVGs generated at build time with view boxes centered on the artwork bounds, and keep glyph metrics or optical adjustments in the shared package rather than individual sites.
+Keep the 44px hit target separate from the visible icon size, and test every control state against its painted bounds after fonts load.
+Review small screenshots in both themes as well: geometric centering is a useful guard, but an asymmetric symbol can still need an intentional optical adjustment.
+
 See the [example article](https://dougborg.org/solarized-ui/article.html) for the site and prose components together.
 For code highlighting, use a highlighter that emits Prism token classes, such as Astro's `syntaxHighlight: "prism"`; highlighters that write inline colors bypass the contrast rules above.
 Class names are global and unprefixed, so check them against any other stylesheet an application loads.

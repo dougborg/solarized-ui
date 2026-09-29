@@ -8,6 +8,44 @@ async function expectReflow(page: Page) {
   );
 }
 
+test("theme glyphs keep their painted shapes centered in the control", async ({ page }, info) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  await page.evaluate(() => document.fonts.ready);
+  // A consumer's circular background makes the icon's painted alignment visible.
+  await page.addStyleTag({
+    content:
+      ".theme-toggle { background: var(--paper); border: 1px solid var(--rule); border-radius: 50%; }",
+  });
+  const toggle = page.locator(".theme-toggle");
+  for (const mode of ["auto", "light", "dark"]) {
+    const bounds = await toggle.evaluate((button) => {
+      const icon = button.querySelector<HTMLElement>(".nerd-icon");
+      const context = document.createElement("canvas").getContext("2d");
+      if (!icon || !context) throw new Error("Missing theme icon or text measurement context");
+      const style = getComputedStyle(icon);
+      context.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+      const ink = context.measureText(icon.textContent ?? "");
+      const glyph = icon.getBoundingClientRect();
+      const target = button.getBoundingClientRect();
+      return {
+        width: target.width,
+        height: target.height,
+        offset:
+          glyph.x +
+          (ink.actualBoundingBoxRight - ink.actualBoundingBoxLeft) / 2 -
+          (target.x + target.width / 2),
+      };
+    });
+    expect(bounds.width).toBe(44);
+    expect(bounds.height).toBe(44);
+    expect(Math.abs(bounds.offset), `${mode} glyph alignment`).toBeLessThan(0.6);
+    await toggle.screenshot({ path: info.outputPath(`theme-${mode}.png`) });
+    await toggle.click();
+  }
+});
+
 for (const colorScheme of ["light", "dark"] as const) {
   for (const width of [320, 1440]) {
     test(`reference ${colorScheme} at ${width}px renders accessible components`, async ({

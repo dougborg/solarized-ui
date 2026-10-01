@@ -39,6 +39,15 @@
 .theme-toggle:hover {
   color: var(--accent-ink);
 }
+/* On narrow screens the control floats over content rather than keeping a gutter clear beside
+   it, so it gets its own surface. */
+@media screen and (max-width: 860px) {
+  .theme-toggle {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 50%;
+  }
+}
 .nerd-icon {
   font-family: var(--mono);
   font-size: 14px;

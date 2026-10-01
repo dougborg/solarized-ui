@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.6.0](https://github.com/dougborg/solarized-ui/compare/v0.5.1...v0.6.0) (2026-10-01)
+
+
+### Features
+
+* **layout:** even narrow-screen insets with the theme control on its own surface ([7f37bc7](https://github.com/dougborg/solarized-ui/commit/7f37bc78bb28a98c7311e594e57532dee5560efe))
+
+
+### Bug Fixes
+
+* **theme:** center glyphs by their painted bounds ([afad1a1](https://github.com/dougborg/solarized-ui/commit/afad1a1a5e5c7873a46459cc6084a72a8dbbbf82))
+
 ## [0.5.1](https://github.com/dougborg/solarized-ui/compare/v0.5.0...v0.5.1) (2026-09-23)
 
 

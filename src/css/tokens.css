@@ -57,6 +57,12 @@
   --measure: 68ch;
   --control-inset: max(16px, env(safe-area-inset-right));
   --control-gutter: calc(var(--control-inset) + 48px);
+  /* The side margin on narrow screens, where the theme control floats over content instead of
+     keeping a gutter clear: 16px, or clear of a notch or rounded corner plus a little air. */
+  --reading-inset: max(
+    16px,
+    calc(max(env(safe-area-inset-left), env(safe-area-inset-right)) + var(--space-2))
+  );
   /* Six accents as hard stops, in the résumé's order; a decorative identity rule. */
   --accent-band: linear-gradient(
     to right,

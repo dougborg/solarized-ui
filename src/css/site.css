@@ -93,10 +93,17 @@
 .page-footer > :last-child {
   margin-bottom: 0;
 }
+/* Narrow screens give both sides the same inset, as the résumé does: the theme control floats over
+   content on its own surface, so no right gutter is kept clear. The bottom padding still clears it
+   at the end of the page. */
+@media (max-width: 860px) {
+  .page-column {
+    padding-inline: var(--reading-inset);
+  }
+}
 @media (max-width: 700px) {
   .page-column {
     padding-top: var(--space-6);
-    padding-left: var(--space-4);
   }
 }
 @media print {

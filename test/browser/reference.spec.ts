@@ -645,3 +645,27 @@ test("quiet patterns keep their edges in forced colors and drop shadows in print
     "4px solid rgb(220, 50, 47)",
   );
 });
+
+test("narrow screens use even side insets and float the control on its own surface", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/article.html");
+  const column = page.locator(".page-column");
+  const [left, right] = await column.evaluate((el) => {
+    const style = getComputedStyle(el);
+    return [style.paddingLeft, style.paddingRight];
+  });
+  expect(left).toBe("16px");
+  expect(right).toBe(left);
+  const toggle = page.locator(".theme-toggle");
+  await expect(toggle).toHaveCSS("border-radius", "50%");
+  expect(await toggle.evaluate((el) => getComputedStyle(el).backgroundColor)).toBe(
+    await page.evaluate(() => getComputedStyle(document.body).backgroundColor),
+  );
+
+  // Wide screens keep the gutter and the bare control.
+  await page.setViewportSize({ width: 1440, height: 900 });
+  expect(await column.evaluate((el) => getComputedStyle(el).paddingRight)).not.toBe("16px");
+  await expect(toggle).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+});

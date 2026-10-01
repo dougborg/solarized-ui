@@ -60,7 +60,8 @@ Its script tag loads `assets/theme.js`; adjust that path to wherever you serve t
 The control defaults to Auto on each page load, follows the system, and cycles Auto → Light → Dark.
 Selection is not persisted.
 Without JavaScript, system colors still work; browsers without `light-dark()` receive the light fallback and no unusable control.
-Reserve `var(--control-gutter)` at the right and at least 60px at the bottom so the floating control cannot cover content.
+Above 860px, reserve `var(--control-gutter)` at the right and at least 60px at the bottom so the floating control cannot cover content.
+At 860px and below, the control gets its own round surface and floats over content, so pages use `var(--reading-inset)` on both sides instead, as `.page-column` does; keep at least 60px at the bottom.
 
 ## Tokens and components
 
@@ -74,6 +75,7 @@ Reserve `var(--control-gutter)` at the right and at least 60px at the bottom so 
 | `--accent-band` | Six-accent hard-stop gradient (blue, cyan, green, yellow, orange, magenta) |
 | `--sans`, `--mono`, `--text-*`, `--leading`, `--measure` | Mixed typography and 68ch reading measure |
 | `--space-*`, `--radius`, `--radius-lg` | Shared spacing scale, 4px corners, and 12px panel corners |
+| `--control-inset`, `--control-gutter`, `--reading-inset` | The theme control's offset from the edge, the right gutter that keeps content clear of it on wide screens, and the even side margin used at 860px and below |
 | `--panel`, `--panel-ink`, `--panel-border`, `--panel-divider` | Quiet panel surface, text, edge, and row dividers |
 | `--shadow-color`, `--elevation` | A faint two-layer shadow in light themes; transparent in dark themes and without relative color |
 | `.content-section`, `.section-title`, `data-accent` | Accent scope and lowercase section heading |

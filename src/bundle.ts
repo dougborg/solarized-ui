@@ -1,5 +1,8 @@
 import { readFile } from "node:fs/promises";
 import { stripTypeScriptTypes } from "node:module";
+import { fileURLToPath } from "node:url";
+import { configElement } from "@dougborg/site-analytics";
+import { privacyUrl, siteAnalytics } from "./site-analytics.ts";
 
 /** Stylesheet sources, concatenated in cascade order. */
 const stylesheets = [
@@ -56,10 +59,30 @@ export async function siteFiles(): Promise<Map<string, Buffer>> {
   const files = new Map<string, Buffer>();
   for (const [path, bytes] of await packageFiles()) files.set(`assets/${path}`, bytes);
   const control = await readFile("src/theme-control.html", "utf8");
+  if (siteAnalytics) {
+    const module = fileURLToPath(import.meta.resolve("@dougborg/site-analytics/analytics.js"));
+    files.set(ANALYTICS_ASSET, await readFile(module));
+  }
   for (const page of ["index.html", "article.html", "status.html"]) {
     const html = await readFile(`reference/${page}`, "utf8");
-    files.set(page, Buffer.from(html.replace("{{theme_control}}", control)));
+    files.set(page, Buffer.from(withAnalytics(html.replace("{{theme_control}}", control))));
   }
   files.set("favicon.svg", await readFile("reference/favicon.svg"));
   return files;
+}
+
+const ANALYTICS_ASSET = "assets/site-analytics/analytics.js";
+
+/**
+ * Add the analytics config element and module to the page's head and a privacy link to its
+ * footer, or leave the page untouched when analytics is off.
+ */
+function withAnalytics(html: string): string {
+  if (!siteAnalytics) return html;
+  const head = `${configElement(siteAnalytics)}\n<script type="module" src="${ANALYTICS_ASSET}"></script>\n`;
+  const link = `<p><a href="${privacyUrl}">Privacy</a></p>\n`;
+  if (!html.includes("</head>") || !html.includes("</footer>")) {
+    throw new Error("reference page needs a </head> and a </footer> for analytics");
+  }
+  return html.replace("</head>", `${head}</head>`).replace("</footer>", `${link}</footer>`);
 }

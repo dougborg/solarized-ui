@@ -60,6 +60,7 @@
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",
     "@biomejs/biome": "2.5.14",
+    "@dougborg/site-analytics": "0.4.0",
     "@fontsource/ibm-plex-sans": "5.3.0",
     "@fontsource/jetbrains-mono": "5.3.0",
     "@playwright/test": "1.63.0",

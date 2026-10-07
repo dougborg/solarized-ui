@@ -80,7 +80,7 @@ const ANALYTICS_ASSET = "assets/site-analytics/analytics.js";
 function withAnalytics(html: string): string {
   if (!siteAnalytics) return html;
   const head = `${configElement(siteAnalytics)}\n<script type="module" src="${ANALYTICS_ASSET}"></script>\n`;
-  const link = `<p><a href="${privacyUrl}">Privacy</a></p>\n`;
+  const link = `<p><a href="${privacyUrl}" rel="privacy-policy">Privacy notice</a></p>\n`;
   if (!html.includes("</head>") || !html.includes("</footer>")) {
     throw new Error("reference page needs a </head> and a </footer> for analytics");
   }

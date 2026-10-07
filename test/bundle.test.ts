@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
+import { configElement } from "@dougborg/site-analytics";
 import { packageFiles, siteFiles } from "../src/bundle.ts";
+import { privacyUrl, siteAnalytics } from "../src/site-analytics.ts";
 
 const files = await packageFiles();
 const css = files.get("solarized-ui.css")?.toString("utf8") ?? "";
@@ -109,5 +112,21 @@ test("the reference site serves the package under assets/", async () => {
     const page = site.get(name)?.toString("utf8") ?? "";
     assert.doesNotMatch(page, /{{/, name);
     assert.match(page, /href="assets\/solarized-ui\.css"/, name);
+  }
+});
+
+test("every reference page reports to Umami and links the privacy page", async () => {
+  assert.ok(siteAnalytics, "analytics is configured");
+  const site = await siteFiles();
+  const module = fileURLToPath(import.meta.resolve("@dougborg/site-analytics/analytics.js"));
+  assert.deepEqual(site.get("assets/site-analytics/analytics.js"), await readFile(module));
+  for (const name of ["index.html", "article.html", "status.html"]) {
+    const page = site.get(name)?.toString("utf8") ?? "";
+    const head = page.slice(0, page.indexOf("</head>"));
+    assert.ok(head.includes(configElement(siteAnalytics)), `${name}: config element in <head>`);
+    assert.match(head, /<script type="module" src="assets\/site-analytics\/analytics\.js">/, name);
+    const footer = page.slice(page.indexOf("<footer"), page.indexOf("</footer>"));
+    assert.ok(footer.includes(`<a href="${privacyUrl}">Privacy</a>`), `${name}: privacy link`);
+    assert.equal(page.match(/id="site-analytics"/g)?.length, 1, `${name}: one config element`);
   }
 });

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import { configElement } from "@dougborg/site-analytics";
+import { configElement, privacyNotice, undisclosedEvents } from "@dougborg/site-analytics";
 import { packageFiles, siteFiles } from "../src/bundle.ts";
 import { privacyUrl, siteAnalytics } from "../src/site-analytics.ts";
 
@@ -115,18 +115,55 @@ test("the reference site serves the package under assets/", async () => {
   }
 });
 
+// The site shares the blog's origin, so it must report under the blog's website and send nothing
+// the blog's notice does not list. Pinned literally: a test built from siteAnalytics itself would
+// pass with any typo in it.
+const BLOG = {
+  websiteId: "86b4f907-4165-4c7b-9250-fe7402c5262f",
+  collector: "https://stats.dougborg.net",
+  hostname: "dougborg.org",
+  declaredEvents: [],
+};
+const blogNotice = privacyNotice({
+  site: BLOG.hostname,
+  controller: { name: "Site owner", email: "owner@example.org" },
+  analytics: BLOG,
+  hosting: "on a server",
+  country: "the United States",
+  retentionDays: 365,
+  updated: "2026-01-01",
+});
+
+test("analytics, when on, reports to the blog's website", () => {
+  if (siteAnalytics) assert.deepEqual(siteAnalytics, BLOG);
+  assert.equal(privacyUrl, "https://dougborg.org/privacy/");
+});
+
 test("every reference page reports to Umami and links the privacy page", async () => {
-  assert.ok(siteAnalytics, "analytics is configured");
   const site = await siteFiles();
+  const pages = ["index.html", "article.html", "status.html"].map(
+    (name) => [name, site.get(name)?.toString("utf8") ?? ""] as const,
+  );
+  if (!siteAnalytics) {
+    // The rollback: no tracker, module, or privacy link anywhere.
+    assert.equal(site.has("assets/site-analytics/analytics.js"), false);
+    for (const [name, page] of pages) {
+      assert.doesNotMatch(page, /site-analytics|dougborg\.org\/privacy/, name);
+    }
+    return;
+  }
   const module = fileURLToPath(import.meta.resolve("@dougborg/site-analytics/analytics.js"));
   assert.deepEqual(site.get("assets/site-analytics/analytics.js"), await readFile(module));
-  for (const name of ["index.html", "article.html", "status.html"]) {
-    const page = site.get(name)?.toString("utf8") ?? "";
+  for (const [name, page] of pages) {
     const head = page.slice(0, page.indexOf("</head>"));
     assert.ok(head.includes(configElement(siteAnalytics)), `${name}: config element in <head>`);
     assert.match(head, /<script type="module" src="assets\/site-analytics\/analytics\.js">/, name);
     const footer = page.slice(page.indexOf("<footer"), page.indexOf("</footer>"));
-    assert.ok(footer.includes(`<a href="${privacyUrl}">Privacy</a>`), `${name}: privacy link`);
+    assert.ok(
+      footer.includes(`<a href="${privacyUrl}" rel="privacy-policy">Privacy notice</a>`),
+      `${name}: privacy link`,
+    );
     assert.equal(page.match(/id="site-analytics"/g)?.length, 1, `${name}: one config element`);
+    assert.deepEqual(undisclosedEvents(page, blogNotice), [], `${name}: undisclosed events`);
   }
 });

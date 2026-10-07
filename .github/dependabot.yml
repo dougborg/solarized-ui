@@ -7,6 +7,10 @@ updates:
     commit-message:
       prefix: chore
       include: scope
+    # The analytics package stays on the blog's version so these pages send only what the
+    # blog's privacy notice lists; it is upgraded by hand, with the blog.
+    ignore:
+      - dependency-name: "@dougborg/site-analytics"
     groups:
       build-toolchain:
         patterns: ["*"]

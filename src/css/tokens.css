@@ -55,6 +55,7 @@
   --text-title: 1.75rem;
   --leading: 1.55;
   --measure: 68ch;
+  --page-width: 1600px;
   --control-inset: max(16px, env(safe-area-inset-right));
   --control-gutter: calc(var(--control-inset) + 48px);
   /* The side margin on narrow screens, where the theme control floats over content instead of

@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.7.0](https://github.com/dougborg/solarized-ui/compare/v0.6.0...v0.7.0) (2026-10-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* **theme:** The stylesheet and theme control default to Dark instead of system appearance; explicit Auto follows the system and visitor selections persist per origin.
+
+### Features
+
+* **theme:** default to dark and persist visitor choices ([5ff9d51](https://github.com/dougborg/solarized-ui/commit/5ff9d516cb0995f8637619e4e469fac2f5bab054))
+
 ## [0.6.0](https://github.com/dougborg/solarized-ui/compare/v0.5.1...v0.6.0) (2026-10-01)
 
 

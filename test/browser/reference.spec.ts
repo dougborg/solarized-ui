@@ -652,6 +652,19 @@ test("quiet patterns keep their edges in forced colors and drop shadows in print
   );
 });
 
+test("wide pages share a configurable outer limit while article prose stays readable", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1920, height: 1080 });
+  await page.goto("/status.html");
+  const column = page.locator(".page-column--wide");
+  expect((await column.boundingBox())?.width).toBe(1600);
+  await column.evaluate((el) => el.style.setProperty("--page-width", "1200px"));
+  expect((await column.boundingBox())?.width).toBe(1200);
+  await page.goto("/article.html");
+  expect((await page.locator(".page-column").boundingBox())?.width).toBeLessThan(1000);
+});
+
 test("narrow screens use even side insets and float the control on its own surface", async ({
   page,
 }) => {

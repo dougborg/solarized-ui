@@ -10,6 +10,10 @@
 .page-column main > * + * {
   margin-top: var(--space-12);
 }
+/* Wide pages share the résumé's outer limit; prose still uses --measure. */
+.page-column--wide {
+  max-width: var(--page-width);
+}
 .article-header {
   margin-bottom: var(--space-6);
 }

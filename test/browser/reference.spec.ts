@@ -2,6 +2,12 @@ import { readdir, readFile } from "node:fs/promises";
 import { AxeBuilder } from "@axe-core/playwright";
 import { expect, type Page, test } from "@playwright/test";
 
+// Existing component matrices intentionally follow the emulated system scheme.
+// First-visit defaults and persisted selections have their own theme acceptance tests.
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem("solarized-ui-theme", "auto"));
+});
+
 async function expectReflow(page: Page) {
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
     (page.viewportSize()?.width ?? 0) + 1,

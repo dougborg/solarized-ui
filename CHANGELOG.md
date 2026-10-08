@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0](https://github.com/dougborg/solarized-ui/compare/v0.7.0...v0.8.0) (2026-10-08)
+
+
+### Features
+
+* add shared wide page layout ([75abaaf](https://github.com/dougborg/solarized-ui/commit/75abaaf1933ae9c893ee373717d3728be6590ea0))
+
 ## [0.7.0](https://github.com/dougborg/solarized-ui/compare/v0.6.0...v0.7.0) (2026-10-08)
 
 

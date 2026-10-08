@@ -57,9 +57,14 @@ The foundation supplies typography and components, not a fixed page grid.
 
 Paste `dist/theme-control.html` before `</body>`.
 Its script tag loads `assets/theme.js`; adjust that path to wherever you serve the module.
-The control defaults to Auto on each page load, follows the system, and cycles Auto → Light → Dark.
-Selection is not persisted.
-Without JavaScript, system colors still work; browsers without `light-dark()` receive the light fallback and no unusable control.
+The shared stylesheet and control default to Dark, regardless of the system preference.
+The control cycles Dark → Auto → Light → Dark; Auto follows the system, including live preference changes.
+An explicit selection is saved in `localStorage` under `solarized-ui-theme` and restored on later visits to the same origin, including other pages using the package.
+Choices are not shared across different domains or subdomains, and no preference is sent to a server.
+Missing or invalid saved values use Dark; blocked or full storage does not prevent theme switching for the current page.
+Without JavaScript, the stylesheet defaults to Dark; set `data-theme="auto"` or `data-theme="light"` on `<html>` to opt into system colors or Light without the control.
+Browsers without `light-dark()` retain the light fallback and no unusable control.
+This changes the previous automatic system default; consumers must upgrade their pinned package or copied release files to adopt it.
 Above 860px, reserve `var(--control-gutter)` at the right and at least 60px at the bottom so the floating control cannot cover content.
 At 860px and below, the control gets its own round surface and floats over content, so pages use `var(--reading-inset)` on both sides instead, as `.page-column` does; keep at least 60px at the bottom.
 
